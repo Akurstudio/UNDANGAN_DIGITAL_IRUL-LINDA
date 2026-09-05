@@ -266,19 +266,51 @@
         if (namaTamu) document.getElementById('nama-tamu').innerText = decodeURIComponent(namaTamu);
 
         function bukaUndangan() {
+            // 1. Sembunyikan cover terlebih dahulu
             document.getElementById('cover').style.opacity = '0';
             document.getElementById('cover').style.visibility = 'hidden';
+            
+            // 2. Tampilkan konten utama
             document.getElementById('content-wrapper').style.display = 'block';
             document.getElementById('navbar').style.opacity = '1';
             document.getElementById('frame-border').classList.add('active');
-            if (!isShareMode) { document.getElementById('music-btn').classList.add('show-btn'); playMusic(); }
-            startRevealAnimation(); startCountdown(); startSparkleEffect();
+            
+            // 3. Jalankan musik dan fitur lainnya
+            if (!isShareMode) { 
+                document.getElementById('music-btn').classList.add('show-btn'); 
+                playMusic(); 
+            }
+            startRevealAnimation(); 
+            startCountdown(); 
+            startSparkleEffect();
         }
 
         const music = document.getElementById('bg-music');
         let isPlaying = false;
-        function playMusic() { music.play().then(() => { isPlaying = true; const btnIcon = document.querySelector('#music-btn i'); if (btnIcon) btnIcon.className = 'fas fa-music'; }).catch(err => { isPlaying = false; const btnIcon = document.querySelector('#music-btn i'); if (btnIcon) btnIcon.className = 'fas fa-volume-mute'; }); }
-        function toggleMusic(e) { e.preventDefault(); if (isPlaying) { music.pause(); document.querySelector('#music-btn i').className = 'fas fa-volume-mute'; isPlaying = false; } else { music.play().then(() => { document.querySelector('#music-btn i').className = 'fas fa-music'; isPlaying = true; }).catch(err => alert("Gagal memutar musik.")); } }
+        function playMusic() { 
+            music.play().then(() => { 
+                isPlaying = true; 
+                const btnIcon = document.querySelector('#music-btn i'); 
+                if (btnIcon) btnIcon.className = 'fas fa-music'; 
+            }).catch(err => { 
+                isPlaying = false; 
+                const btnIcon = document.querySelector('#music-btn i'); 
+                if (btnIcon) btnIcon.className = 'fas fa-volume-mute'; 
+            }); 
+        }
+        function toggleMusic(e) { 
+            e.preventDefault(); 
+            if (isPlaying) { 
+                music.pause(); 
+                document.querySelector('#music-btn i').className = 'fas fa-volume-mute'; 
+                isPlaying = false; 
+            } else { 
+                music.play().then(() => { 
+                    document.querySelector('#music-btn i').className = 'fas fa-music'; 
+                    isPlaying = true; 
+                }).catch(err => alert("Gagal memutar musik.")); 
+            } 
+        }
 
         let targetDate = new Date("2026-01-23T08:00:00").getTime();
         function setCountdown(dateVal) { targetDate = new Date(dateVal).getTime(); startCountdown(); }
