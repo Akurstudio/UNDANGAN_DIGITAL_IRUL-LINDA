@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <!-- Library Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -101,9 +100,6 @@
         .btn-save { background: var(--primary); color: var(--bg-dark); border: none; padding: 15px; width: 100%; cursor: pointer; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; font-weight: 700; }
         .btn-save:hover { background: var(--secondary); }
 
-        body.editing-text .editable { outline: 1px dashed var(--primary) !important; outline-offset: 4px; background: rgba(197, 165, 114, 0.1); cursor: text; border-radius: 2px; }
-        body.editing-text .editable:hover { background: rgba(197, 165, 114, 0.2); }
-
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 50px; max-width: 900px; width: 100%; margin-top: 50px; }
         form input, form select, form textarea { width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 3px; background: var(--bg-surface); color: var(--white); font-size: 0.9rem; }
         form input:focus, form select:focus, form textarea:focus { outline: none; border-color: var(--primary); }
@@ -147,13 +143,14 @@
             <h3>Pengaturan Database</h3>
             <button onclick="toggleEditPanel()" style="background:none; border:none; font-size:1.8rem; cursor:pointer; color:var(--primary);">&times;</button>
         </div>
+
         <div class="edit-group">
-            <label>Upload Musik (URL / Link MP3)</label>
-            <input type="text" id="edit-music" placeholder="Masukkan URL MP3" oninput="music.src=this.value; saveDataToDB()">
+            <label>Upload Musik MP3</label>
+            <input type="file" accept="audio/mpeg, audio/mp3" onchange="uploadMusic(event)">
         </div>
         <div class="edit-group">
-            <label>Foto Pria (URL)</label>
-            <input type="text" id="edit-foto-pria" placeholder="Masukkan URL Foto" oninput="document.getElementById('foto-pria').src=this.value; saveDataToDB()">
+            <label>Foto Mempelai Pria</label>
+            <input type="file" accept="image/*" onchange="uploadImage(event, 'foto-pria', 'groom_photo')">
         </div>
         <div class="edit-group">
             <label>Nama Mempelai Pria</label>
@@ -165,8 +162,8 @@
         </div>
         <hr style="margin: 25px 0; border-color: var(--border-color);">
         <div class="edit-group">
-            <label>Foto Wanita (URL)</label>
-            <input type="text" id="edit-foto-wanita" placeholder="Masukkan URL Foto" oninput="document.getElementById('foto-wanita').src=this.value; saveDataToDB()">
+            <label>Foto Mempelai Wanita</label>
+            <input type="file" accept="image/*" onchange="uploadImage(event, 'foto-wanita', 'bride_photo')">
         </div>
         <div class="edit-group">
             <label>Nama Mempelai Wanita</label>
@@ -180,6 +177,10 @@
         <div class="edit-group">
             <label>Tanggal Akad (Hitung Mundur)</label>
             <input type="datetime-local" id="edit-date" onchange="setCountdown(this.value); saveDataToDB()">
+        </div>
+        <div class="edit-group">
+            <label>Upload Foto Galeri (Pilih multiple)</label>
+            <input type="file" accept="image/*" multiple onchange="uploadGallery(event)">
         </div>
         <button class="btn-save" onclick="toggleEditPanel()">Tutup Panel</button>
     </div>
@@ -313,9 +314,10 @@
     <script>
         // ===== KONFIGURASI SUPABASE =====
         const SUPABASE_URL = "https://gpyhiwbuflcsdibjklmt.supabase.co"; // Ganti dengan URL Anda
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdweWhpd2J1Zmxjc2RpYmprbG10Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MTcwMDAwMDAwMH0.DUMMY_KEY_GANTI_DENGAN_API_KEY_ANDA"; // Ganti dengan API Key Anda
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...DUMMY_KEY_GANTI_DENGAN_API_KEY_ANDA"; // Ganti dengan API Key Anda
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        const INVITATION_ID = "a1b2c3d4-e5f6-7890-1234-567890abcdef"; // ID dari SQL Step 1
+        const INVITATION_ID = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
+        const BUCKET_NAME = "wedding-assets"; // Nama bucket yang dibuat di Langkah 1
 
         // ===== SMOOTH SCROLL =====
         const lenis = new Lenis({ duration: 1.4, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
@@ -360,6 +362,57 @@
 
         function startSparkleEffect() { const c = document.getElementById('sparkle-canvas'), ctx = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight; let s = [], m = 80; class S { constructor() { this.reset(); } reset() { this.x = Math.random()*c.width; this.y = Math.random()*-c.height; this.size = Math.random()*2.5+1; this.sY = Math.random()*1.5+0.5; this.sX = Math.random()*0.5-0.25; this.o = Math.random()*0.8+0.2; } update() { this.y += this.sY; this.x += this.sX; if (this.y > c.height) { this.reset(); this.y = -10; } } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, 6.28); ctx.fillStyle = `rgba(230,207,168,${this.o})`; ctx.shadowBlur = 15; ctx.shadowColor = 'rgba(197,165,114,1)'; ctx.fill(); ctx.closePath(); } } for(let i=0; i<m; i++) s.push(new S()); function anim() { ctx.clearRect(0,0,c.width,c.height); s.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); } anim(); }
 
+        // ===== FUNGSI UPLOAD FILE KE SUPABASE STORAGE =====
+        async function uploadImage(event, elementId, dbColumn) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const filePath = `images/${elementId}_${Date.now()}_${file.name}`;
+            
+            const { error } = await sb.storage.from(BUCKET_NAME).upload(filePath, file);
+            if (error) { alert("Gagal upload foto: " + error.message); return; }
+            
+            const { data: pub } = sb.storage.from(BUCKET_NAME).getPublicUrl(filePath);
+            document.getElementById(elementId).src = pub.publicUrl;
+            await sb.from('invitations').update({ [dbColumn]: pub.publicUrl }).eq('id', INVITATION_ID);
+        }
+
+        async function uploadMusic(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const filePath = `music/bg_music_${Date.now()}_${file.name}`;
+            
+            const { error } = await sb.storage.from(BUCKET_NAME).upload(filePath, file);
+            if (error) { alert("Gagal upload musik: " + error.message); return; }
+            
+            const { data: pub } = sb.storage.from(BUCKET_NAME).getPublicUrl(filePath);
+            music.src = pub.publicUrl;
+            music.load();
+            await sb.from('invitations').update({ music_url: pub.publicUrl }).eq('id', INVITATION_ID);
+            alert("Musik berhasil diunggah!");
+        }
+
+        async function uploadGallery(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+            const grid = document.getElementById('grid-gallery');
+            grid.innerHTML = ''; 
+            const urls = [];
+
+            for (let i = 0; i < files.length; i++) {
+                const filePath = `gallery/img_${Date.now()}_${i}_${files[i].name}`;
+                const { error } = await sb.storage.from(BUCKET_NAME).upload(filePath, files[i]);
+                if (!error) {
+                    const { data: pub } = sb.storage.from(BUCKET_NAME).getPublicUrl(filePath);
+                    urls.push(pub.publicUrl);
+                    const img = document.createElement('img');
+                    img.src = pub.publicUrl;
+                    img.setAttribute('onclick', 'openLightbox(this.src)');
+                    grid.appendChild(img);
+                }
+            }
+            await sb.from('invitations').update({ gallery_urls: urls }).eq('id', INVITATION_ID);
+        }
+
         // ===== FUNGSI DATABASE SUPABASE =====
         async function loadDataFromDB() {
             const { data, error } = await sb.from('invitations').select('*').eq('id', INVITATION_ID).single();
@@ -380,13 +433,8 @@
                 document.getElementById('edit-rek-wanita').value = data.bride_rek;
                 document.getElementById('rek-wanita').innerText = data.bride_rek;
 
-                document.getElementById('edit-foto-pria').value = data.groom_photo;
                 document.getElementById('foto-pria').src = data.groom_photo;
-                
-                document.getElementById('edit-foto-wanita').value = data.bride_photo;
                 document.getElementById('foto-wanita').src = data.bride_photo;
-
-                document.getElementById('edit-music').value = data.music_url;
                 music.src = data.music_url;
 
                 const dateObj = new Date(data.wedding_date);
@@ -414,9 +462,6 @@
                 bride_name: document.getElementById('edit-wanita').value,
                 groom_rek: document.getElementById('edit-rek-pria').value,
                 bride_rek: document.getElementById('edit-rek-wanita').value,
-                groom_photo: document.getElementById('edit-foto-pria').value,
-                bride_photo: document.getElementById('edit-foto-wanita').value,
-                music_url: document.getElementById('edit-music').value,
                 wedding_date: new Date(document.getElementById('edit-date').value).toISOString()
             };
             const { error } = await sb.from('invitations').update(updateData).eq('id', INVITATION_ID);
@@ -431,7 +476,7 @@
             
             const { error } = await sb.from('rsvp').insert([{ nama, kehadiran: hadir, pesan: isi }]);
             if (!error) {
-                loadRSVP(); // Refresh daftar ucapan
+                loadRSVP(); 
                 document.getElementById('nama-komen').value = '';
                 document.getElementById('kehadiran-komen').value = '';
                 document.getElementById('isi-komen').value = '';
@@ -452,7 +497,6 @@
             }
         }
 
-        // Muat data dari Supabase saat halaman dibuka
         loadDataFromDB();
     </script>
 </body>
