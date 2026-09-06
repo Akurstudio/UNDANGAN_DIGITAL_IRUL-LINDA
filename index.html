@@ -312,13 +312,11 @@
     </div>
 
     <script>
-        // ===== KONFIGURASI SUPABASE =====
-        const SUPABASE_URL = "https://xoiotomgebtszexuknfb.supabase.co"; // Ganti dengan URL Anda
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaW90b21nZWJ0c3pleHVrbmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MzAxODQsImV4cCI6MjEwNDIwNjE4NH0.Qh1bnauDEMFE-gN7m-rYc5lPsOmvfDjMAMO6yD34CR4"; // Ganti dengan API Key Anda
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        const INVITATION_ID = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
-        const BUCKET_NAME = "wedding-assets"; // Nama bucket yang dibuat di Langkah 1
-
+       // ===== KONFIGURASI SUPABASE =====
+// Ganti bagian di dalam tanda kutip dengan punya Anda dari dashboard Supabase
+const SUPABASE_URL = "https://xoiotomgebtszexuknfb.supabase.co"; 
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaW90b21nZWJ0c3pleHVrbmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MzAxODQsImV4cCI6MjEwNDIwNjE4NH0.Qh1bnauDEMFE-gN7m-rYc5lPsOmvfDjMAMO6yD34CR4"; // Pastikan key ini PANJANG dan utuh
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         // ===== SMOOTH SCROLL =====
         const lenis = new Lenis({ duration: 1.4, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); } requestAnimationFrame(raf);
