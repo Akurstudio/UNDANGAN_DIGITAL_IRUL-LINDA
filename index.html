@@ -133,7 +133,6 @@
         @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         #sparkle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; }
         
-        /* Status Auto-Save */
         #save-status { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(20,20,20,0.9); color: var(--primary); padding: 10px 20px; border-radius: 20px; font-size: 0.75rem; letter-spacing: 1px; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
         #save-status.show { opacity: 1; }
     </style>
@@ -245,9 +244,14 @@
 
     <script>
         // ====== KONFIGURASI SUPABASE ======
-        const SUPABASE_URL = 'https://xoiotomgebtszexuknfb.supabase.co'; // GANTI INI
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaW90b21nZWJ0c3pleHVrbmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MzAxODQsImV4cCI6MjEwNDIwNjE4NH0.Qh1bnauDEMFE-gN7m-rYc5lPsOmvfDjMAMO6yD34CR4'; // GANTI INI
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const SUPABASE_URL = 'https://xoiotomgebtszexuknfb.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaW90b21nZWJ0c3pleHVrbmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MzAxODQsImV4cCI6MjEwNDIwNjE4NH0.Qh1bnauDEMFE-gN7m-rYc5lPsOmvfDjMAMO6yD34CR4';
+        let supabase = null;
+        try {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch(e) {
+            console.error("Supabase gagal dimuat:", e);
+        }
         const WEDDING_ID = '1'; 
 
         // ====== SMOOTH SCROLL ======
@@ -260,22 +264,21 @@
         const namaTamu = urlParams.get('to');
 
         if (isShareMode) {
-            document.getElementById('edit-toggle').style.display = 'none';
-            document.getElementById('music-btn').style.display = 'none';
+            const editToggle = document.getElementById('edit-toggle');
+            const musicBtn = document.getElementById('music-btn');
+            if(editToggle) editToggle.style.display = 'none';
+            if(musicBtn) musicBtn.style.display = 'none';
         }
         if (namaTamu) document.getElementById('nama-tamu').innerText = decodeURIComponent(namaTamu);
 
+        // ====== FUNGSI BUKA UNDANGAN (DIPASTIKAN JALAN) ======
         function bukaUndangan() {
-            // 1. Sembunyikan cover terlebih dahulu
             document.getElementById('cover').style.opacity = '0';
             document.getElementById('cover').style.visibility = 'hidden';
-            
-            // 2. Tampilkan konten utama
             document.getElementById('content-wrapper').style.display = 'block';
             document.getElementById('navbar').style.opacity = '1';
             document.getElementById('frame-border').classList.add('active');
             
-            // 3. Jalankan musik dan fitur lainnya
             if (!isShareMode) { 
                 document.getElementById('music-btn').classList.add('show-btn'); 
                 playMusic(); 
@@ -308,13 +311,22 @@
                 music.play().then(() => { 
                     document.querySelector('#music-btn i').className = 'fas fa-music'; 
                     isPlaying = true; 
-                }).catch(err => alert("Gagal memutar musik.")); 
+                }).catch(err => console.log("Autoplay diblokir")); 
             } 
         }
 
         let targetDate = new Date("2026-01-23T08:00:00").getTime();
-        function setCountdown(dateVal) { targetDate = new Date(dateVal).getTime(); startCountdown(); }
-        function startCountdown() { setInterval(() => { let distance = targetDate - new Date().getTime(); if (distance < 0) distance = 0; document.getElementById('hari').innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0'); document.getElementById('jam').innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0'); document.getElementById('menit').innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0'); document.getElementById('detik').innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0'); }, 1000); }
+        function setCountdown(dateVal) { targetDate = new Date(dateVal).getTime(); }
+        function startCountdown() { 
+            setInterval(() => { 
+                let distance = targetDate - new Date().getTime(); 
+                if (distance < 0) distance = 0; 
+                document.getElementById('hari').innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0'); 
+                document.getElementById('jam').innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0'); 
+                document.getElementById('menit').innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0'); 
+                document.getElementById('detik').innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0'); 
+            }, 1000); 
+        }
 
         function toggleEditPanel() { document.getElementById('edit-panel').classList.toggle('active'); }
         function updateText(target, value) {
@@ -322,48 +334,54 @@
             const firstNameWanita = document.getElementById('edit-wanita').value.split(' ')[0];
             if (target === 'pria') { document.getElementById('home-pria').innerText = firstNamePria; document.getElementById('cover-names').innerText = value + " & " + document.getElementById('edit-wanita').value; } 
             else if (target === 'wanita') { document.getElementById('home-wanita').innerText = firstNameWanita; document.getElementById('cover-names').innerText = document.getElementById('edit-pria').value + " & " + value; }
-            autoSaveData(); // Auto Save ke Supabase saat nama diketik
+            autoSaveData(); 
         }
 
-        // ====== UPLOAD KE SUPABASE STORAGE ======
+        // ====== UPLOAD FILE BASE64 (LANGSUNG MASUK DATABASE TANPA STORAGE) ======
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
         async function uploadFile(event, imgId) {
             const file = event.target.files[0];
             if (!file) return;
-            const fileName = `${imgId}_${Date.now()}.${file.name.split('.').pop()}`;
-            const { data, error } = await supabase.storage.from('wedding-media').upload(fileName, file);
-            if (error) { alert("Gagal upload foto: " + error.message); return; }
-            const publicUrl = supabase.storage.from('wedding-media').getPublicUrl(fileName).data.publicUrl;
-            document.getElementById(imgId).src = publicUrl;
-            autoSaveData(); // Simpan URL foto ke DB
+            try {
+                const base64 = await fileToBase64(file);
+                document.getElementById(imgId).src = base64;
+                autoSaveData(); 
+            } catch(e) { alert("Gagal upload foto"); }
         }
 
         async function uploadMusic(event) {
             const file = event.target.files[0];
             if (!file) return;
-            const fileName = `music_${Date.now()}.${file.name.split('.').pop()}`;
-            const { data, error } = await supabase.storage.from('wedding-media').upload(fileName, file);
-            if (error) { alert("Gagal upload musik: " + error.message); return; }
-            const publicUrl = supabase.storage.from('wedding-media').getPublicUrl(fileName).data.publicUrl;
-            music.src = publicUrl; music.load();
-            autoSaveData(); // Simpan URL musik ke DB
+            try {
+                const base64 = await fileToBase64(file);
+                music.src = base64; 
+                music.load();
+                autoSaveData(); 
+            } catch(e) { alert("Gagal upload musik"); }
         }
 
         async function uploadGallery(event) {
             const files = event.target.files;
             const grid = document.getElementById('grid-gallery');
-            let galleryUrls = [];
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                const fileName = `gallery_${i}_${Date.now()}.${file.name.split('.').pop()}`;
-                const { data, error } = await supabase.storage.from('wedding-media').upload(fileName, file);
-                if (!error) {
-                    const publicUrl = supabase.storage.from('wedding-media').getPublicUrl(fileName).data.publicUrl;
-                    galleryUrls.push(publicUrl);
+                try {
+                    const base64 = await fileToBase64(file);
                     const img = document.createElement('img');
-                    img.src = publicUrl; img.setAttribute('onclick', 'openLightbox(this.src)'); grid.appendChild(img);
-                }
+                    img.src = base64; 
+                    img.setAttribute('onclick', 'openLightbox(this.src)'); 
+                    grid.appendChild(img);
+                } catch(e) {}
             }
-            autoSaveData(); // Simpan array URL galeri ke DB
+            autoSaveData(); 
         }
 
         function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('active'); lenis.stop(); }
@@ -383,14 +401,18 @@
         function addComment(e) { e.preventDefault(); const nama = document.getElementById('nama-komen').value; const hadir = document.getElementById('kehadiran-komen').value; const isi = document.getElementById('isi-komen').value; const html = `<div class="komen-box"><strong>${nama}</strong><span class="status-hadir">${hadir}</span><p>${isi}</p></div>`; document.getElementById('komentar-list').insertAdjacentHTML('afterbegin', html); document.getElementById('nama-komen').value = ''; document.getElementById('kehadiran-komen').value = ''; document.getElementById('isi-komen').value = ''; }
         function copyRekening(id) { const text = document.getElementById(id).innerText; navigator.clipboard.writeText(text).then(() => { const btn = event.target.closest('button'); const originalHtml = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> Tersalin'; setTimeout(() => { btn.innerHTML = originalHtml; }, 2000); }).catch(err => alert("Gagal menyalin: " + text)); }
 
-        // ====== AUTO-SAVE & LOAD SUPABASE DATABASE ======
+        // ====== AUTO-SAVE & LOAD SUPABASE (DENGAN PENGAMAN ERROR) ======
         let saveTimeout;
         function autoSaveData() {
             clearTimeout(saveTimeout);
             const statusEl = document.getElementById('save-status');
+            if(!statusEl) return;
             statusEl.classList.add('show');
+            statusEl.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Menyimpan...';
             
             saveTimeout = setTimeout(async () => {
+                if (!supabase) { console.warn("Database belum terhubung"); return; }
+                
                 const payload = { inputs: {}, editables: {}, images: {}, music: null };
                 document.querySelectorAll('#edit-panel input[type="text"], #edit-panel input[type="datetime-local"]').forEach(input => payload.inputs[input.id] = input.value);
                 document.querySelectorAll('.editable').forEach((el, index) => { const key = el.id ? el.id : `el_${index}`; payload.editables[key] = el.innerHTML; });
@@ -399,48 +421,63 @@
                 payload.images.gallery = Array.from(document.querySelectorAll('#grid-gallery img')).map(img => img.src);
                 payload.music = music.src;
 
-                const { error } = await supabase.from('weddings').upsert({ id: WEDDING_ID, name: 'Fahri_Suci', data: payload });
-                if (error) { statusEl.innerHTML = '<i class="fas fa-circle-xmark"></i> Gagal menyimpan'; console.error(error); } 
-                else { statusEl.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Tersimpan di Cloud'; setTimeout(() => statusEl.classList.remove('show'), 2000); }
-            }, 1000); // Delay 1 detik agar tidak spam DB saat mengetik
+                try {
+                    const { error } = await supabase.from('weddings').upsert({ id: WEDDING_ID, name: 'Fahri_Suci', data: payload });
+                    if (error) { 
+                        statusEl.innerHTML = '<i class="fas fa-circle-xmark"></i> Gagal menyimpan'; 
+                        console.error("Supabase Error:", error); 
+                    } else { 
+                        statusEl.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Tersimpan di Cloud'; 
+                        setTimeout(() => statusEl.classList.remove('show'), 2000); 
+                    }
+                } catch(e) {
+                    console.error("Error simpan:", e);
+                    statusEl.innerHTML = '<i class="fas fa-circle-xmark"></i> Error DB';
+                }
+            }, 1000); 
         }
 
         async function loadDataFromSupabase() {
-            const { data, error } = await supabase.from('weddings').select('data').eq('id', WEDDING_ID).single();
-            if (data && data.data) {
-                const saved = data.data;
-                if (saved.inputs) {
-                    Object.keys(saved.inputs).forEach(id => {
-                        if (document.getElementById(id)) {
-                            document.getElementById(id).value = saved.inputs[id];
-                            document.getElementById(id).dispatchEvent(new Event('input'));
-                            if (id === 'edit-date') document.getElementById(id).dispatchEvent(new Event('change'));
-                        }
-                    });
-                }
-                if (saved.editables) {
-                    document.querySelectorAll('.editable').forEach((el, index) => {
-                        const key = el.id ? el.id : `el_${index}`;
-                        if (saved.editables[key]) el.innerHTML = saved.editables[key];
-                    });
-                }
-                if (saved.images) {
-                    if (saved.images.fotoPria) document.getElementById('foto-pria').src = saved.images.fotoPria;
-                    if (saved.images.fotoWanita) document.getElementById('foto-wanita').src = saved.images.fotoWanita;
-                    if (saved.images.gallery && saved.images.gallery.length > 0) {
-                        const grid = document.getElementById('grid-gallery');
-                        grid.innerHTML = '';
-                        saved.images.gallery.forEach(src => {
-                            const img = document.createElement('img');
-                            img.src = src; img.setAttribute('onclick', 'openLightbox(this.src)'); grid.appendChild(img);
+            if (!supabase) return;
+            try {
+                const { data, error } = await supabase.from('weddings').select('data').eq('id', WEDDING_ID).single();
+                if (data && data.data) {
+                    const saved = data.data;
+                    if (saved.inputs) {
+                        Object.keys(saved.inputs).forEach(id => {
+                            if (document.getElementById(id)) {
+                                document.getElementById(id).value = saved.inputs[id];
+                                document.getElementById(id).dispatchEvent(new Event('input'));
+                                if (id === 'edit-date') document.getElementById(id).dispatchEvent(new Event('change'));
+                            }
                         });
                     }
+                    if (saved.editables) {
+                        document.querySelectorAll('.editable').forEach((el, index) => {
+                            const key = el.id ? el.id : `el_${index}`;
+                            if (saved.editables[key]) el.innerHTML = saved.editables[key];
+                        });
+                    }
+                    if (saved.images) {
+                        if (saved.images.fotoPria) document.getElementById('foto-pria').src = saved.images.fotoPria;
+                        if (saved.images.fotoWanita) document.getElementById('foto-wanita').src = saved.images.fotoWanita;
+                        if (saved.images.gallery && saved.images.gallery.length > 0) {
+                            const grid = document.getElementById('grid-gallery');
+                            grid.innerHTML = '';
+                            saved.images.gallery.forEach(src => {
+                                const img = document.createElement('img');
+                                img.src = src; img.setAttribute('onclick', 'openLightbox(this.src)'); grid.appendChild(img);
+                            });
+                        }
+                    }
+                    if (saved.music) { music.src = saved.music; music.load(); }
                 }
-                if (saved.music) { music.src = saved.music; music.load(); }
+            } catch(e) {
+                console.error("Gagal load data:", e);
             }
         }
 
-        // Load data dari Supabase saat halaman dibuka
+        // Load data saat halaman dibuka
         loadDataFromSupabase();
     </script>
 </body>
