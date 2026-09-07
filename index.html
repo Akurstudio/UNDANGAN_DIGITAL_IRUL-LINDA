@@ -2,7 +2,6 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <!-- Optimasi viewport untuk Android agar tidak zoom otomatis saat input teks -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Wedding of Fahri & Suci</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
@@ -46,7 +45,6 @@
         .frame-border.active { opacity: 1; }
         .frame-border::after { content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border: 1px solid rgba(197, 165, 114, 0.1); }
 
-        /* Optimasi background untuk Android agar tidak jitter saat scroll */
         #content-wrapper { position: relative; background-color: var(--bg-dark); background-image: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.95)), url('https://images.unsplash.com/photo-1615529182904-14819c35db37?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: 0; animation: fadeInContent 2s ease forwards; }
         #content-wrapper::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C5A572' fill-opacity='0.03'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z'/%3E%3C/g%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
         @keyframes fadeInContent { from { opacity: 0; } to { opacity: 1; } }
@@ -78,13 +76,11 @@
         .event-card h3 { font-size: 1.8rem; color: var(--primary); margin-bottom: 15px; font-style: italic; }
         .event-card p { font-size: 0.9rem; line-height: 1.8; color: #ccc; }
 
-        /* Maps Elegant Styling */
         .maps-card { margin-top: 35px; width: 100%; max-width: 420px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(197, 165, 114, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
         .maps-card iframe { width: 100%; height: 250px; border: 0; filter: grayscale(40%) invert(90%) contrast(85%); }
         .btn-maps { display: inline-block; text-decoration: none; background: var(--bg-surface); color: var(--primary); padding: 12px 25px; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; width: 100%; border-top: 1px solid var(--border-color); font-weight: 500; font-family: 'Montserrat', sans-serif; }
         .btn-maps:hover { background: var(--primary); color: var(--bg-dark); }
 
-        /* Galeri Elegan dengan Postur Foto (Contain) */
         .grid-gallery { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 450px; margin-top: 25px; }
         .grid-gallery img { width: 100%; height: auto; max-height: 600px; object-fit: contain; border-radius: 6px; transition: 0.6s; cursor: pointer; filter: grayscale(30%) brightness(0.85); box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid rgba(197, 165, 114, 0.15); background: var(--bg-surface); }
         .grid-gallery img:hover { transform: scale(1.01); filter: grayscale(0%) brightness(1); box-shadow: 0 15px 35px rgba(0,0,0,0.6); border-color: var(--primary); }
@@ -94,15 +90,23 @@
         .doa-translate { font-size: 0.85rem; color: #ccc; font-style: italic; line-height: 1.7; margin-bottom: 10px; }
 
         .bank-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 35px; width: 100%; max-width: 800px; }
-        .bank-card { background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.95)); padding: 30px 25px; border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(197, 165, 114, 0.2); width: 100%; max-width: 340px; text-align: center; transition: 0.4s; }
+        .bank-card { background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.95)); padding: 30px 25px; border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(197, 165, 114, 0.2); width: 100%; max-width: 340px; text-align: center; transition: 0.4s; display: flex; flex-direction: column; align-items: center; }
         .bank-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .bank-logo { display: inline-block; background: transparent; color: var(--primary); padding: 5px 15px; border: 1px solid var(--primary); border-radius: 4px; font-weight: 700; letter-spacing: 3px; margin-bottom: 20px; font-size: 0.85rem; font-family: 'Montserrat', sans-serif; }
-        .bank-number { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--white); margin: 10px 0; letter-spacing: 1px; font-weight: 600; }
-        .bank-name { font-size: 0.8rem; color: #888; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-copy { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 8px 20px; cursor: pointer; border-radius: 4px; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; font-family: 'Montserrat', sans-serif; }
+        .bank-logo-img { width: 100px; height: auto; max-height: 70px; object-fit: contain; margin-bottom: 20px; filter: brightness(1.2); }
+        .bank-text-logo { font-size: 1.2rem; color: var(--primary); letter-spacing: 3px; font-weight: 700; margin-bottom: 15px; font-family: 'Montserrat', sans-serif; }
+        .bank-number { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--white); margin: 5px 0 10px; letter-spacing: 1.5px; font-weight: 600; }
+        .bank-name { font-size: 0.95rem; color: #ddd; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
+        .btn-copy { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 10px 25px; cursor: pointer; border-radius: 4px; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; font-family: 'Montserrat', sans-serif; width: 100%; max-width: 200px; }
         .btn-copy:hover { background: var(--primary); color: var(--bg-dark); }
 
-        /* PERBAIKAN PANEL EDIT: Agar bisa di-scroll secara native di HP */
+        /* CSS TAMBAHAN: Tampilan Ikon Sosial Media */
+        .social-media-section { margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(197, 165, 114, 0.2); display: flex; flex-direction: column; align-items: center; }
+        .social-media-section h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--primary); font-style: italic; margin-bottom: 20px; }
+        .social-icons { display: flex; gap: 20px; }
+        .social-icons a { width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; text-decoration: none; transition: 0.4s; }
+        .social-icons a:hover { background: var(--primary); color: var(--bg-dark); transform: translateY(-4px); box-shadow: 0 5px 15px rgba(197, 165, 114, 0.3); }
+        .footer-credit { margin-top: 40px; font-size: 0.7rem; color: #666; letter-spacing: 2px; text-transform: uppercase; }
+
         #edit-panel { position: fixed; top: 0; left: 0; width: 300px; height: 100vh; background: var(--bg-surface); box-shadow: 2px 0 30px rgba(0,0,0,0.5); padding: 30px; transform: translateX(-100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1003; border-right: 1px solid var(--primary); overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
         #edit-panel.active { transform: translateX(0); }
         .edit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
@@ -135,7 +139,6 @@
         .lightbox img { max-width: 90%; max-height: 90vh; border-radius: 5px; border: 2px solid var(--primary); box-shadow: 0 10px 50px rgba(0,0,0,0.8); animation: zoomIn 0.4s ease; }
         .lightbox-close { position: absolute; top: 20px; right: 35px; color: var(--primary); font-size: 40px; font-weight: bold; transition: 0.3s; }
 
-        /* Media query khusus tablet & desktop */
         @media (min-width: 768px) { 
             .grid-2 { grid-template-columns: 1fr 1fr; } 
             .grid-gallery { max-width: 600px; } 
@@ -143,7 +146,7 @@
             .main-name { font-size: 7rem; } 
             .ampersand { font-size: 5rem; }
             .mempelai-foto { width: 240px; height: 240px; }
-            #content-wrapper { background-attachment: fixed; /* Parallax hanya untuk layar besar */ }
+            #content-wrapper { background-attachment: fixed; }
         }
         @keyframes elegantFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -156,7 +159,6 @@
     <canvas id="sparkle-canvas"></canvas>
     <div class="frame-border" id="frame-border"></div>
 
-    <!-- Tambahan data-lenis-prevent agar Lightbox bisa di-scroll jika gambar panjang -->
     <div id="lightbox" class="lightbox" data-lenis-prevent onclick="closeLightbox(event)">
         <span class="lightbox-close" onclick="closeLightbox(event, true)">&times;</span>
         <img id="lightbox-img" src="" alt="Zoomed Photo">
@@ -164,7 +166,6 @@
 
     <div id="edit-toggle" onclick="toggleEditPanel()"><i class="fas fa-cog"></i></div>
 
-    <!-- Tambahan data-lenis-prevent AGAR PANEL BISA DI SCROLL DI HP -->
     <div id="edit-panel" data-lenis-prevent>
         <div class="edit-header">
             <h3>Pengaturan Database</h3>
@@ -172,13 +173,21 @@
         </div>
         <div class="edit-group">
             <button class="btn-edit-text" id="btn-edit-mode" onclick="toggleTextEditMode()" style="width: 100%; padding: 10px; background: transparent; border: 1px solid var(--secondary); color: var(--secondary); cursor: pointer; text-transform: uppercase; font-size: 0.8rem; border-radius: 4px;">Aktifkan Edit Teks</button>
-            <p style="font-size: 0.7rem; color: #888; margin-top: 10px; line-height: 1.5;">Klik tombol di atas, lalu klik teks di undangan untuk mengubahnya. Klik kembali untuk mengunci & simpan.</p>
+            <p style="font-size: 0.7rem; color: #888; margin-top: 10px; line-height: 1.5;">Klik tombol di atas, lalu klik teks di undangan (termasuk link sosial media) untuk mengubahnya. Klik kembali untuk mengunci & simpan.</p>
         </div>
         <hr style="margin: 25px 0; border-color: var(--border-color);">
+        
+        <div class="edit-group">
+            <label>Foto Halaman Depan (Cover)</label>
+            <input type="file" accept="image/*" onchange="uploadCoverPhoto(event)">
+        </div>
         <div class="edit-group">
             <label>Upload Musik MP3</label>
             <input type="file" accept="audio/mpeg, audio/mp3" onchange="uploadMusic(event)">
         </div>
+        
+        <hr style="margin: 25px 0; border-color: var(--border-color);">
+        
         <div class="edit-group">
             <label>Foto Mempelai Pria</label>
             <input type="file" accept="image/*" onchange="uploadImage(event, 'foto-pria', 'groom_photo')">
@@ -191,7 +200,13 @@
             <label>No. Rekening Mempelai Pria</label>
             <input type="text" id="edit-rek-pria" oninput="document.getElementById('rek-pria').innerText=this.value; saveDataToDB()">
         </div>
+        <div class="edit-group">
+            <label>Upload Logo Bank Pria</label>
+            <input type="file" accept="image/*" onchange="uploadImage(event, 'logo-pria', 'groom_bank_logo')">
+        </div>
+        
         <hr style="margin: 25px 0; border-color: var(--border-color);">
+        
         <div class="edit-group">
             <label>Foto Mempelai Wanita</label>
             <input type="file" accept="image/*" onchange="uploadImage(event, 'foto-wanita', 'bride_photo')">
@@ -204,7 +219,13 @@
             <label>No. Rekening Mempelai Wanita</label>
             <input type="text" id="edit-rek-wanita" oninput="document.getElementById('rek-wanita').innerText=this.value; saveDataToDB()">
         </div>
+        <div class="edit-group">
+            <label>Upload Logo Bank Wanita</label>
+            <input type="file" accept="image/*" onchange="uploadImage(event, 'logo-wanita', 'bride_bank_logo')">
+        </div>
+        
         <hr style="margin: 25px 0; border-color: var(--border-color);">
+        
         <div class="edit-group">
             <label>Tanggal Akad (Hitung Mundur)</label>
             <input type="datetime-local" id="edit-date" onchange="setCountdown(this.value); saveDataToDB()">
@@ -219,10 +240,10 @@
     <div id="cover">
         <div class="cover-content">
             <h2>The Wedding Of</h2>
-            <h1 id="cover-names">Fahri & Suci</h1>
+            <h1 class="editable" id="cover-names">Fahri & Suci</h1>
             <div class="to">Kepada Yth.</div>
-            <span class="nama-tamu" id="nama-tamu">Bapak/Ibu/Saudara/i</span>
-            <div class="di-tempat">Tamu Undangan</div>
+            <span class="nama-tamu editable" id="nama-tamu">Bapak/Ibu/Saudara/i</span>
+            <div class="di-tempat editable">Tamu Undangan</div>
             <button class="btn-buka" onclick="bukaUndangan()">Buka Undangan</button>
         </div>
     </div>
@@ -286,7 +307,6 @@
                     <p class="editable">Jum'at, 23 Januari 2026<br>Pukul: 08.00 WIB</p>
                 </div>
                 
-                <!-- Tambahan Maps Lokasi -->
                 <div class="maps-card">
                     <iframe src="https://www.google.com/maps?q=Monas+Jakarta&output=embed" allowfullscreen="" loading="lazy"></iframe>
                     <a href="https://www.google.com/maps?q=Monas+Jakarta" target="_blank" class="btn-maps">Lihat Lokasi Maps</a>
@@ -314,16 +334,18 @@
                 <div class="decoration editable">❦</div>
                 <div class="bank-grid">
                     <div class="bank-card">
-                        <div class="bank-logo editable">BANK MANDIRI</div>
+                        <div id="logo-pria-text" class="bank-text-logo editable">BANK MANDIRI</div>
+                        <img id="logo-pria" src="" class="bank-logo-img" style="display: none;" alt="Logo Bank">
                         <p class="bank-number" id="rek-pria">9000008690043</p>
                         <p class="bank-name editable">a.n. Fahri Maulana Yusuf</p>
-                        <button class="btn-copy" onclick="copyRekening('rek-pria')"><i class="fas fa-copy"></i> Salin</button>
+                        <button class="btn-copy" onclick="copyRekening('rek-pria')"><i class="fas fa-copy"></i> Salin Rekening</button>
                     </div>
                     <div class="bank-card">
-                        <div class="bank-logo editable">BANK BRI</div>
+                        <div id="logo-wanita-text" class="bank-text-logo editable">BANK BRI</div>
+                        <img id="logo-wanita" src="" class="bank-logo-img" style="display: none;" alt="Logo Bank">
                         <p class="bank-number" id="rek-wanita">078701008585503</p>
                         <p class="bank-name editable">a.n. Suci Santika Anggraeni</p>
-                        <button class="btn-copy" onclick="copyRekening('rek-wanita')"><i class="fas fa-copy"></i> Salin</button>
+                        <button class="btn-copy" onclick="copyRekening('rek-wanita')"><i class="fas fa-copy"></i> Salin Rekening</button>
                     </div>
                 </div>
             </div>
@@ -347,16 +369,27 @@
                             <button type="submit" class="btn-submit">Kirim Ucapan</button>
                         </form>
                     </div>
-                    <!-- Tambahan data-lenis-prevent agar kotak komentar bisa di-scroll -->
                     <div id="komentar-list" data-lenis-prevent style="max-height: 450px; overflow-y: auto; padding-right: 10px;"></div>
                 </div>
+                
+                <!-- TAMBAHAN: Bagian Sosial Media di bagian bawah undangan -->
+                <div class="social-media-section">
+                    <h3 class="editable">Follow Our Journey</h3>
+                    <div class="social-icons">
+                        <a href="#" id="link-wa" class="editable" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" id="link-ig" class="editable" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="#" id="link-fb" class="editable" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" id="link-tt" class="editable" target="_blank"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                    <p class="footer-credit editable">Made with ❤️ by Fahri & Suci</p>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
         // ===== KONFIGURASI SUPABASE =====
-        // GANTI DENGAN URL DAN API KEY ANDA SENDIRI!
         const SUPABASE_URL = "https://xoiotomgebtszexuknfb.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaW90b21nZWJ0c3pleHVrbmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MzAxODQsImV4cCI6MjEwNDIwNjE4NH0.Qh1bnauDEMFE-gN7m-rYc5lPsOmvfDjMAMO6yD34CR4"; 
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -373,19 +406,17 @@
         if (isShareMode) { document.getElementById('edit-toggle').style.display = 'none'; document.getElementById('music-btn').style.display = 'none'; }
         if (namaTamu) document.getElementById('nama-tamu').innerText = decodeURIComponent(namaTamu);
 
-        // ===== FUNGSI TOMBOL KEMBALI HP (HISTORY NAVIGATION) =====
+        // ===== FUNGSI TOMBOL KEMBALI HP =====
         window.history.pushState({ page: 'content' }, '', '');
         window.addEventListener('popstate', function(event) {
             const contentWrapper = document.getElementById('content-wrapper');
             const cover = document.getElementById('cover');
-            
             if (contentWrapper.style.display === 'block') {
                 contentWrapper.style.display = 'none';
                 cover.style.opacity = '1';
                 cover.style.visibility = 'visible';
                 document.getElementById('navbar').style.opacity = '0';
                 document.getElementById('frame-border').classList.remove('active');
-                
                 if (isPlaying) { music.pause(); isPlaying = false; }
                 window.history.pushState({ page: 'cover' }, '', '');
             } else {
@@ -413,7 +444,6 @@
         function setCountdown(dateVal) { targetDate = new Date(dateVal).getTime(); }
         function startCountdown() { setInterval(() => { let d = targetDate - new Date().getTime(); if (d < 0) d = 0; document.getElementById('hari').innerText = String(Math.floor(d / 86400000)).padStart(2, '0'); document.getElementById('jam').innerText = String(Math.floor((d % 86400000) / 3600000)).padStart(2, '0'); document.getElementById('menit').innerText = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0'); document.getElementById('detik').innerText = String(Math.floor((d % 60000) / 1000)).padStart(2, '0'); }, 1000); }
 
-        // PERBAIKAN: Menggunakan lenis.stop() saat panel dibuka agar tidak bentrok dengan smooth scroll
         function toggleEditPanel() { 
             const panel = document.getElementById('edit-panel');
             const isActive = panel.classList.toggle('active');
@@ -434,6 +464,19 @@
 
         function startSparkleEffect() { const c = document.getElementById('sparkle-canvas'), ctx = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight; let s = [], m = 80; class S { constructor() { this.reset(); } reset() { this.x = Math.random()*c.width; this.y = Math.random()*-c.height; this.size = Math.random()*2.5+1; this.sY = Math.random()*1.5+0.5; this.sX = Math.random()*0.5-0.25; this.o = Math.random()*0.8+0.2; } update() { this.y += this.sY; this.x += this.sX; if (this.y > c.height) { this.reset(); this.y = -10; } } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, 6.28); ctx.fillStyle = `rgba(230,207,168,${this.o})`; ctx.shadowBlur = 15; ctx.shadowColor = 'rgba(197,165,114,1)'; ctx.fill(); ctx.closePath(); } } for(let i=0; i<m; i++) s.push(new S()); function anim() { ctx.clearRect(0,0,c.width,c.height); s.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); } anim(); }
 
+        // ===== FUNGSI UPLOAD FOTO HALAMAN DEPAN (COVER) =====
+        async function uploadCoverPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const filePath = `images/cover_bg_${Date.now()}_${file.name}`;
+            const { error } = await sb.storage.from(BUCKET_NAME).upload(filePath, file);
+            if (error) { alert("Gagal upload foto cover: " + error.message); return; }
+            const { data: pub } = sb.storage.from(BUCKET_NAME).getPublicUrl(filePath);
+            document.getElementById('cover').style.backgroundImage = `url('${pub.publicUrl}')`;
+            await sb.from('invitations').update({ cover_photo: pub.publicUrl }).eq('id', INVITATION_ID);
+            alert("Foto halaman depan berhasil diunggah!");
+        }
+
         // ===== FUNGSI UPLOAD FILE KE SUPABASE STORAGE =====
         async function uploadImage(event, elementId, dbColumn) {
             const file = event.target.files[0];
@@ -442,7 +485,12 @@
             const { error } = await sb.storage.from(BUCKET_NAME).upload(filePath, file);
             if (error) { alert("Gagal upload foto: " + error.message); return; }
             const { data: pub } = sb.storage.from(BUCKET_NAME).getPublicUrl(filePath);
-            document.getElementById(elementId).src = pub.publicUrl;
+            const imgEl = document.getElementById(elementId);
+            imgEl.src = pub.publicUrl;
+            if (elementId === 'logo-pria' || elementId === 'logo-wanita') {
+                imgEl.style.display = 'block';
+                document.getElementById(elementId + '-text').style.display = 'none';
+            }
             await sb.from('invitations').update({ [dbColumn]: pub.publicUrl }).eq('id', INVITATION_ID);
         }
 
@@ -499,6 +547,21 @@
                 document.getElementById('foto-pria').src = data.groom_photo;
                 document.getElementById('foto-wanita').src = data.bride_photo;
                 music.src = data.music_url;
+
+                if (data.cover_photo) {
+                    document.getElementById('cover').style.backgroundImage = `url('${data.cover_photo}')`;
+                }
+
+                if (data.groom_bank_logo) {
+                    document.getElementById('logo-pria').src = data.groom_bank_logo;
+                    document.getElementById('logo-pria').style.display = 'block';
+                    document.getElementById('logo-pria-text').style.display = 'none';
+                }
+                if (data.bride_bank_logo) {
+                    document.getElementById('logo-wanita').src = data.bride_bank_logo;
+                    document.getElementById('logo-wanita').style.display = 'block';
+                    document.getElementById('logo-wanita-text').style.display = 'none';
+                }
 
                 const dateObj = new Date(data.wedding_date);
                 const localDate = new Date(dateObj.getTime() - dateObj.getTimezoneOffset() * 60000).toISOString().slice(0,16);
