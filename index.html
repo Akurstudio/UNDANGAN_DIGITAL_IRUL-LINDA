@@ -18,7 +18,7 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Montserrat', sans-serif; color: var(--text-color); font-weight: 300; background-color: var(--bg-dark); overflow-x: hidden; }
+        body { font-family: 'Montserrat', sans-serif; color: var(--text-color); font-weight: 300; background-color: var(--bg-dark); overflow-x: hidden; transition: background-color 0.8s var(--ease-luxe); }
         
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
@@ -69,7 +69,8 @@
         .frame-border.active { opacity: 1; }
         .frame-border::after { content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border: 1px solid rgba(197, 165, 114, 0.1); }
 
-        #content-wrapper { position: relative; background-color: var(--bg-dark); background-image: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.95)), url('https://images.unsplash.com/photo-1615529182904-14819c35db37?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s var(--ease-luxe); }
+        /* ===== CONTENT WRAPPER (BACKGROUND DALAM UNDANGAN) ===== */
+        #content-wrapper { position: relative; background-color: var(--bg-dark); background-image: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.92)), url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s var(--ease-luxe); }
         #content-wrapper.show { opacity: 1; }
         #content-wrapper::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C5A572' fill-opacity='0.03'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z'/%3E%3C/g%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
 
@@ -134,10 +135,7 @@
         .bank-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 25px 60px rgba(197, 165, 114, 0.25); }
         .bank-logo-img { width: 100px; height: auto; max-height: 70px; object-fit: contain; margin-bottom: 20px; filter: brightness(1.2); }
         .bank-text-logo { font-size: 1.2rem; color: var(--primary); letter-spacing: 3px; font-weight: 700; margin-bottom: 15px; font-family: 'Montserrat', sans-serif; }
-        
-        /* ===== PERUBAHAN FONT NOMOR REKENING ===== */
         .bank-number { font-family: 'Montserrat', sans-serif; font-size: 1.3rem; color: var(--white); margin: 5px 0 10px; letter-spacing: 1px; font-weight: 700; }
-        
         .bank-name { font-size: 0.95rem; color: #ddd; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
         .btn-copy { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 10px 25px; cursor: pointer; border-radius: 4px; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.4s var(--ease-luxe); font-family: 'Montserrat', sans-serif; width: 100%; max-width: 200px; }
         .btn-copy:hover { background: var(--primary); color: var(--bg-dark); letter-spacing: 3px; }
@@ -157,7 +155,8 @@
         .edit-header h3 { color: var(--primary); font-size: 1.3rem; }
         .edit-group { margin-bottom: 20px; }
         .edit-group label { display: block; font-size: 0.75rem; margin-bottom: 8px; color: var(--primary); font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
-        .edit-group input, .edit-group textarea, .edit-group select { width: 100%; padding: 10px; border: 1px solid var(--border-color); font-size: 0.85rem; border-radius: 3px; background: var(--bg-dark); color: var(--white); }
+        .edit-group input, .edit-group textarea, .edit-group select { width: 100%; padding: 10px; border: 1px solid var(--border-color); font-size: 0.85rem; border-radius: 3px; background: var(--bg-dark); color: var(--white); transition: border-color 0.3s ease; }
+        .edit-group input:focus, .edit-group textarea:focus, .edit-group select:focus { outline: none; border-color: var(--primary); }
         .btn-save { background: var(--primary); color: var(--bg-dark); border: none; padding: 15px; width: 100%; cursor: pointer; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; font-weight: 700; }
 
         body.editing-text .editable { outline: 1px dashed var(--primary) !important; outline-offset: 4px; background: rgba(197, 165, 114, 0.1); cursor: text; border-radius: 2px; }
@@ -198,6 +197,7 @@
             .lightbox-arrow { width: 45px; height: 45px; font-size: 1.5rem; }
             .lightbox-arrow.prev { left: 20px; }
             .lightbox-arrow.next { right: 20px; }
+            #content-wrapper { background-attachment: fixed; }
         }
         @keyframes elegantFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes zoomIn { from { transform: scale(0.85) rotate(-2deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
@@ -205,6 +205,33 @@
 
         .ripple { position: absolute; border-radius: 50%; background: rgba(197, 165, 114, 0.5); transform: scale(0); animation: rippleEffect 0.7s var(--ease-luxe); pointer-events: none; }
         @keyframes rippleEffect { to { transform: scale(4); opacity: 0; } }
+
+        /* ===== LAYOUT VARIATIONS ===== */
+        /* 1. Klasik Royal (Default) - Sudah diatur di atas */
+
+        /* 2. Polaroid Minimalis */
+        body.polaroid_minimal .mempelai-foto { width: 260px; height: 320px; border-radius: 2px; border: 10px solid #f5f5f5; box-shadow: 0 15px 40px rgba(0,0,0,0.5); filter: none; animation: none; }
+        body.polaroid_minimal .mempelai-foto:hover { transform: scale(1.02) rotate(-2deg); border-color: #fff; }
+        body.polaroid_minimal .countdown-box { background: transparent; border: none; box-shadow: none; padding: 5px 10px; min-width: 50px; }
+        body.polaroid_minimal .countdown-box .angka { font-size: 2rem; border-bottom: 2px solid var(--primary); padding-bottom: 5px; margin-bottom: 2px; }
+        body.polaroid_minimal .countdown-box .label { color: var(--secondary); opacity: 1; font-size: 0.55rem; }
+        body.polaroid_minimal .main-name { background: none; -webkit-text-fill-color: var(--primary); color: var(--primary); text-shadow: none; }
+        body.polaroid_minimal .decoration::before, body.polaroid_minimal .decoration::after { height: 2px; }
+
+        /* 3. Modern Lingkaran */
+        body.modern_circle .mempelai-foto { width: 240px; height: 240px; border-radius: 50%; border: 3px solid var(--primary); animation: floatSoft 6s ease-in-out infinite; }
+        body.modern_circle .countdown-box { background: transparent; border: 1px solid var(--primary); border-radius: 50%; width: 75px; height: 75px; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.3); padding: 0; }
+        body.modern_circle .countdown-box .angka { font-size: 1.8rem; }
+        body.modern_circle .countdown-box .label { font-size: 0.55rem; margin-top: 0; }
+        body.modern_circle .main-title-container { flex-direction: row; align-items: center; gap: 15px; }
+        body.modern_circle .main-name { font-size: 2.5rem; letter-spacing: 5px; background: none; -webkit-text-fill-color: var(--primary); color: var(--primary); text-shadow: none; }
+        body.modern_circle .ampersand { font-size: 2.5rem; margin: 0; }
+
+        @media (min-width: 768px) {
+            body.modern_circle .mempelai-foto { width: 280px; height: 280px; }
+            body.modern_circle .main-name { font-size: 4rem; }
+            body.modern_circle .ampersand { font-size: 3rem; }
+        }
     </style>
 </head>
 <body>
@@ -240,7 +267,32 @@
             <button id="btn-edit-mode" onclick="toggleTextEditMode()" style="width: 100%; padding: 10px; background: transparent; border: 1px solid var(--secondary); color: var(--secondary); cursor: pointer; text-transform: uppercase; font-size: 0.8rem; border-radius: 4px;">Aktifkan Edit Teks</button>
         </div>
         <hr style="margin: 25px 0; border-color: var(--border-color);">
-        <div class="edit-group"><label>Foto Halaman Depan (Cover)</label><input type="file" accept="image/*" onchange="uploadCoverPhoto(event)"></div>
+
+        <!-- PEMILIH TEMA WARNA -->
+        <div class="edit-group">
+            <label>Pilih Tema Warna</label>
+            <select id="edit-theme" onchange="applyTheme(this.value); saveDataToDB()">
+                <option value="royal_gold">Royal Gold & Black</option>
+                <option value="emerald_champagne">Emerald & Champagne</option>
+                <option value="midnight_blush">Midnight & Blush</option>
+                <option value="burgundy_silver">Burgundy & Silver</option>
+                <option value="terracotta_coffee">Earthy Terracotta</option>
+                <option value="plum_lavender">Elegant Plum</option>
+            </select>
+        </div>
+
+        <!-- PEMILIH TAMPILAN (LAYOUT) -->
+        <div class="edit-group">
+            <label>Pilih Tampilan (Layout)</label>
+            <select id="edit-layout" onchange="applyLayout(this.value); saveDataToDB()">
+                <option value="royal_arch">Klasik Royal (Lengkung)</option>
+                <option value="polaroid_minimal">Polaroid Minimalis</option>
+                <option value="modern_circle">Modern Lingkaran</option>
+            </select>
+        </div>
+        <hr style="margin: 25px 0; border-color: var(--border-color);">
+
+        <div class="edit-group"><label>Foto Halaman Depan & Background</label><input type="file" accept="image/*" onchange="uploadCoverPhoto(event)"></div>
         <div class="edit-group"><label>Upload Musik MP3</label><input type="file" accept="audio/mpeg, audio/mp3" onchange="uploadMusic(event)"></div>
         <hr style="margin: 25px 0; border-color: var(--border-color);">
         <div class="edit-group"><label>Foto Mempelai Pria</label><input type="file" accept="image/*" onchange="uploadImage(event, 'foto-pria', 'groom_photo')"></div>
@@ -432,6 +484,34 @@
             }
         }
 
+        // ===== KONFIGURASI TEMA WARNA =====
+        const themes = {
+            royal_gold: { primary: '#C5A572', secondary: '#E6CFA8', bg_dark: '#0A0A0A', bg_surface: '#141414', bg_alt: '#1A1A1A', border_color: '#333333' },
+            emerald_champagne: { primary: '#D4AF37', secondary: '#F1E5B8', bg_dark: '#0B1A16', bg_surface: '#102420', bg_alt: '#15291D', border_color: '#1C3328' },
+            midnight_blush: { primary: '#D8AAB4', secondary: '#E6CFA8', bg_dark: '#0A0F1F', bg_surface: '#11182C', bg_alt: '#161E36', border_color: '#1F2942' },
+            burgundy_silver: { primary: '#C0C0C0', secondary: '#E6CFA8', bg_dark: '#1A0A0E', bg_surface: '#26131A', bg_alt: '#2E1922', border_color: '#3D2530' },
+            terracotta_coffee: { primary: '#C77B58', secondary: '#E6CFA8', bg_dark: '#1A120B', bg_surface: '#241A11', bg_alt: '#2C2014', border_color: '#3D2E1F' },
+            plum_lavender: { primary: '#C9B1D6', secondary: '#E6CFA8', bg_dark: '#130B16', bg_surface: '#1C1320', bg_alt: '#231827', border_color: '#2D2233' }
+        };
+
+        function applyTheme(themeName) {
+            const theme = themes[themeName] || themes.royal_gold;
+            const root = document.documentElement.style;
+            root.setProperty('--primary', theme.primary);
+            root.setProperty('--secondary', theme.secondary);
+            root.setProperty('--bg-dark', theme.bg_dark);
+            root.setProperty('--bg-surface', theme.bg_surface);
+            root.setProperty('--bg-alt', theme.bg_alt);
+            root.setProperty('--border-color', theme.border_color);
+        }
+
+        // ===== KONFIGURASI TAMPILAN (LAYOUT) =====
+        const layoutOptions = ['royal_arch', 'polaroid_minimal', 'modern_circle'];
+        function applyLayout(layoutName) {
+            layoutOptions.forEach(l => document.body.classList.remove(l));
+            document.body.classList.add(layoutName || 'royal_arch');
+        }
+
         setTimeout(() => {
             const pre = document.getElementById('preloader');
             if (pre) pre.classList.add('hidden');
@@ -447,7 +527,6 @@
         const isShareMode = urlParams.get('share') === 'true';
         const namaTamu = urlParams.get('to');
         
-        // JIKA SHARE MODE, TOMBOL EDIT PANEL, TOMBOL BAGIKAN, DAN TOMBOL MUSIK DIHILANGKAN
         if (isShareMode) { 
             document.getElementById('edit-toggle').style.display = 'none'; 
             document.getElementById('share-btn').style.display = 'none'; 
@@ -466,7 +545,6 @@
             document.getElementById('navbar').classList.add('show');
             document.getElementById('frame-border').classList.add('active');
             
-            // TOMBOL MUSIK HANYA AKAN MUNCUL JIKA BUKAN SHARE MODE
             if (!isShareMode) {
                 document.getElementById('music-btn').classList.add('show-btn');
                 playMusic();
@@ -703,9 +781,15 @@
             const { error } = await sb.storage.from(BUCKET_NAME).upload(filePath, file);
             if (error) return alert("Gagal upload: " + error.message);
             const { data: pub } = sb.storage.from(BUCKET_NAME).getPublicUrl(filePath);
-            document.getElementById('cover').style.backgroundImage = `url('${pub.publicUrl}')`;
-            await sb.from('invitations').update({ cover_photo: pub.publicUrl }).eq('id', INVITATION_ID);
-            alert("Foto cover berhasil diunggah!");
+            const imgUrl = pub.publicUrl;
+            
+            // Set background cover depan
+            document.getElementById('cover').style.backgroundImage = `url('${imgUrl}')`;
+            // Set background di dalam undangan (dengan overlay gelap agar teks terbaca)
+            document.getElementById('content-wrapper').style.backgroundImage = `linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.92)), url('${imgUrl}')`;
+            
+            await sb.from('invitations').update({ cover_photo: imgUrl }).eq('id', INVITATION_ID);
+            alert("Foto cover & background berhasil diunggah!");
         }
 
         async function uploadImage(event, elementId, dbColumn) {
@@ -758,6 +842,14 @@
                 const { data, error } = await sb.from('invitations').select('*').eq('id', INVITATION_ID).single();
                 if (error) throw error;
                 if (data) {
+                    if (data.theme) {
+                        document.getElementById('edit-theme').value = data.theme;
+                        applyTheme(data.theme);
+                    }
+                    if (data.layout) {
+                        document.getElementById('edit-layout').value = data.layout;
+                        applyLayout(data.layout);
+                    }
                     document.getElementById('cover-names').innerText = data.couple_name;
                     document.getElementById('edit-pria').value = data.groom_name || '';
                     document.getElementById('nama-pria-display').innerText = data.groom_name || '';
@@ -772,7 +864,13 @@
                     if(data.groom_photo) document.getElementById('foto-pria').src = data.groom_photo;
                     if(data.bride_photo) document.getElementById('foto-wanita').src = data.bride_photo;
                     if (data.music_url) music.src = data.music_url;
-                    if (data.cover_photo) document.getElementById('cover').style.backgroundImage = `url('${data.cover_photo}')`;
+                    
+                    // LOAD FOTO COVER SEKALIGUS JADI BACKGROUND DALAM UNDANGAN
+                    if (data.cover_photo) {
+                        document.getElementById('cover').style.backgroundImage = `url('${data.cover_photo}')`;
+                        document.getElementById('content-wrapper').style.backgroundImage = `linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.92)), url('${data.cover_photo}')`;
+                    }
+                    
                     if (data.groom_bank_logo) {
                         document.getElementById('logo-pria').src = data.groom_bank_logo;
                         document.getElementById('logo-pria').style.display = 'block';
@@ -823,7 +921,9 @@
                     bride_name: document.getElementById('edit-wanita').value,
                     groom_rek: document.getElementById('edit-rek-pria').value,
                     bride_rek: document.getElementById('edit-rek-wanita').value,
-                    wedding_date: new Date(document.getElementById('edit-date').value).toISOString()
+                    wedding_date: new Date(document.getElementById('edit-date').value).toISOString(),
+                    theme: document.getElementById('edit-theme').value,
+                    layout: document.getElementById('edit-layout').value
                 };
                 const { error } = await sb.from('invitations').update(updateData).eq('id', INVITATION_ID);
                 if (error) throw error;
