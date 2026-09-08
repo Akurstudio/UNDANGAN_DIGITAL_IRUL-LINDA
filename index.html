@@ -13,101 +13,137 @@
             --primary: #C5A572; --secondary: #E6CFA8; --bg-dark: #0A0A0A;
             --bg-surface: #141414; --bg-alt: #1A1A1A; --text-color: #E0E0E0;
             --white: #ffffff; --border-color: #333333;
+            --ease-luxe: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html { scroll-behavior: smooth; }
         body { font-family: 'Montserrat', sans-serif; color: var(--text-color); font-weight: 300; background-color: var(--bg-dark); overflow-x: hidden; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--primary), var(--secondary)); border-radius: 10px; }
+        ::selection { background: var(--primary); color: var(--bg-dark); }
+
         h1, h2, h3, .serif { font-family: 'Cormorant Garamond', serif; font-weight: 400; }
         .arabic { font-family: 'Amiri', serif; color: var(--secondary); }
-        
-        #cover { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--white); transition: opacity 1.5s ease, visibility 1.5s ease; }
+
+        /* ===== PRELOADER ===== */
+        #preloader { position: fixed; inset: 0; background: var(--bg-dark); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1.2s var(--ease-luxe), visibility 1.2s var(--ease-luxe); }
+        #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .preloader-ring { width: 80px; height: 80px; border: 2px solid rgba(197, 165, 114, 0.15); border-top-color: var(--primary); border-right-color: var(--secondary); border-radius: 50%; animation: preSpin 1.4s linear infinite; margin-bottom: 25px; box-shadow: 0 0 30px rgba(197, 165, 114, 0.3); }
+        .preloader-text { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.4rem; color: var(--primary); letter-spacing: 4px; }
+        @keyframes preSpin { to { transform: rotate(360deg); } }
+
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 2px; width: 0%; background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary)); z-index: 9997; transition: width 0.1s linear; box-shadow: 0 0 10px rgba(197, 165, 114, 0.6); }
+
+        /* ===== COVER ===== */
+        #cover { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--white); transition: opacity 1.5s var(--ease-luxe), visibility 1.5s var(--ease-luxe); }
         #cover::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.95) 100%); }
         .cover-content { position: relative; z-index: 2; padding: 40px 25px; max-width: 90%; border: 1px solid rgba(197, 165, 114, 0.4); backdrop-filter: blur(3px); box-shadow: 0 0 30px rgba(0,0,0,0.5); }
-        .cover-content h2 { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 300; letter-spacing: 6px; margin-bottom: 20px; text-transform: uppercase; color: var(--primary); opacity: 0; animation: elegantFade 1.5s ease 0.3s forwards; }
-        .cover-content h1 { font-size: 3.5rem; font-style: italic; font-weight: 500; margin: 5px 0; text-shadow: 0 10px 30px rgba(0,0,0,0.8); opacity: 0; animation: elegantFade 1.5s ease 0.6s forwards; line-height: 1.2; }
-        .cover-content .to { font-size: 0.7rem; margin-top: 30px; letter-spacing: 4px; text-transform: uppercase; opacity: 0; animation: elegantFade 1.5s ease 0.9s forwards; color: #ccc; }
-        .cover-content .nama-tamu { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 500; color: var(--white); margin-bottom: 10px; display: block; opacity: 0; animation: elegantFade 1.5s ease 1.2s forwards; }
-        .cover-content .di-tempat { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: #aaa; opacity: 0; animation: elegantFade 1.5s ease 1.4s forwards; }
-        .btn-buka { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 14px 35px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 4px; cursor: pointer; transition: 0.4s; text-transform: uppercase; margin-top: 35px; opacity: 0; animation: elegantFade 1.5s ease 1.6s forwards; font-weight: 500; }
-        .btn-buka:hover { background: var(--primary); color: var(--bg-dark); letter-spacing: 6px; box-shadow: 0 5px 20px rgba(197, 165, 114, 0.3); }
+        .cover-content h2 { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; font-weight: 300; letter-spacing: 6px; margin-bottom: 20px; text-transform: uppercase; color: var(--primary); animation: elegantFade 1.5s ease 0.3s forwards; opacity: 0; }
+        .cover-content h1 { font-size: 3.5rem; font-style: italic; font-weight: 500; margin: 5px 0; text-shadow: 0 10px 30px rgba(0,0,0,0.8); animation: elegantFade 1.5s ease 0.6s forwards; line-height: 1.2; opacity: 0; }
+        .cover-content .to { font-size: 0.7rem; margin-top: 30px; letter-spacing: 4px; text-transform: uppercase; color: #ccc; animation: elegantFade 1.5s ease 0.9s forwards; opacity: 0; }
+        .cover-content .nama-tamu { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 500; color: var(--white); margin-bottom: 10px; display: block; animation: elegantFade 1.5s ease 1.2s forwards; opacity: 0; }
+        .cover-content .di-tempat { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: #aaa; animation: elegantFade 1.5s ease 1.4s forwards; opacity: 0; }
+        .btn-buka { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 14px 35px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 4px; cursor: pointer; transition: all 0.5s var(--ease-luxe); text-transform: uppercase; margin-top: 35px; animation: elegantFade 1.5s ease 1.6s forwards; font-weight: 500; position: relative; overflow: hidden; opacity: 0; }
+        .btn-buka:hover { background: var(--primary); color: var(--bg-dark); letter-spacing: 6px; box-shadow: 0 5px 25px rgba(197, 165, 114, 0.5); transform: translateY(-2px); }
 
-        #music-btn, #edit-toggle { position: fixed; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 1001; opacity: 0; transition: opacity 1s ease; font-size: 1rem; text-decoration: none; }
+        #music-btn, #edit-toggle { position: fixed; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 1001; opacity: 0; transition: all 0.5s var(--ease-luxe); font-size: 1rem; text-decoration: none; }
         #music-btn { top: max(15px, env(safe-area-inset-top)); right: 15px; background: var(--bg-surface); color: var(--primary); border: 1px solid var(--primary); }
         #edit-toggle { top: max(15px, env(safe-area-inset-top)); left: 15px; background: var(--bg-surface); color: var(--primary); z-index: 1002; border: 1px solid var(--primary); opacity: 1; }
-        #edit-toggle:hover, #music-btn:hover { background: var(--primary); color: var(--bg-dark); }
+        #edit-toggle:hover, #music-btn:hover { background: var(--primary); color: var(--bg-dark); transform: scale(1.1) rotate(15deg); }
         .show-btn { opacity: 1 !important; }
 
-        .navbar { position: fixed; bottom: max(15px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-radius: 50px; padding: 10px 25px; display: flex; gap: 25px; z-index: 1000; opacity: 0; transition: opacity 1s ease; border: 1px solid var(--border-color); }
-        .navbar a { color: var(--primary); font-size: 0.9rem; transition: 0.3s; }
-        .navbar a:hover { color: var(--secondary); transform: translateY(-4px); }
+        .navbar { position: fixed; bottom: max(15px, env(safe-area-inset-bottom)); left: 50%; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(15px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-radius: 50px; padding: 10px 25px; display: flex; gap: 25px; z-index: 1000; opacity: 0; transform: translateX(-50%) translateY(80px); transition: all 1s var(--ease-luxe); border: 1px solid var(--border-color); }
+        .navbar.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .navbar a { color: var(--primary); font-size: 0.9rem; transition: all 0.4s var(--ease-luxe); position: relative; padding: 5px 8px; }
+        .navbar a:hover { color: var(--secondary); transform: translateY(-4px) scale(1.15); }
 
-        .frame-border { position: fixed; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 1px solid rgba(197, 165, 114, 0.25); pointer-events: none; z-index: 998; opacity: 0; transition: opacity 2s ease; }
+        .frame-border { position: fixed; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 1px solid rgba(197, 165, 114, 0.25); pointer-events: none; z-index: 998; opacity: 0; transition: opacity 2s var(--ease-luxe); }
         .frame-border.active { opacity: 1; }
         .frame-border::after { content: ''; position: absolute; top: 4px; left: 4px; right: 4px; bottom: 4px; border: 1px solid rgba(197, 165, 114, 0.1); }
 
-        #content-wrapper { position: relative; background-color: var(--bg-dark); background-image: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.95)), url('https://images.unsplash.com/photo-1615529182904-14819c35db37?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: 0; animation: fadeInContent 2s ease forwards; }
+        #content-wrapper { position: relative; background-color: var(--bg-dark); background-image: linear-gradient(rgba(10, 10, 10, 0.9), rgba(10, 10, 10, 0.95)), url('https://images.unsplash.com/photo-1615529182904-14819c35db37?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s var(--ease-luxe); }
+        #content-wrapper.show { opacity: 1; }
         #content-wrapper::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C5A572' fill-opacity='0.03'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z'/%3E%3C/g%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
-        @keyframes fadeInContent { from { opacity: 0; } to { opacity: 1; } }
 
         .section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 120px 25px; position: relative; z-index: 1; }
-        .section h2 { font-size: 2.5rem; color: var(--white); margin-bottom: 10px; font-weight: 500; font-style: italic; }
+        .section h2 { font-size: 2.8rem; color: var(--white); margin-bottom: 10px; font-weight: 500; font-style: italic; }
         .section .sub-title { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--primary); margin-bottom: 15px; display: block; font-weight: 400; }
         .section .decoration { color: var(--primary); margin: 25px 0; font-size: 1.2rem; opacity: 0.6; display: flex; align-items: center; gap: 15px; }
-        .section .decoration::before, .section .decoration::after { content: ''; width: 40px; height: 1px; background: var(--primary); opacity: 0.5; display: inline-block; }
+        .section .decoration::before, .section .decoration::after { content: ''; width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--primary), transparent); display: inline-block; }
         .section p { max-width: 600px; margin: 5px auto; line-height: 1.9; font-size: 0.9rem; color: #b0b0b0; letter-spacing: 0.5px; }
         .section-bg-alt { background-color: rgba(0, 0, 0, 0.3); }
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; display: flex; flex-direction: column; align-items: center; }
+
+        .reveal { opacity: 0; transform: translateY(60px); transition: all 1.8s var(--ease-luxe); width: 100%; display: flex; flex-direction: column; align-items: center; }
         .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal > * { opacity: 0; transform: translateY(30px); transition: all 1.2s var(--ease-luxe); }
+        .reveal.active > * { opacity: 1; transform: translateY(0); }
+        .reveal.active > *:nth-child(1) { transition-delay: 0.1s; }
+        .reveal.active > *:nth-child(2) { transition-delay: 0.25s; }
+        .reveal.active > *:nth-child(3) { transition-delay: 0.4s; }
+        .reveal.active > *:nth-child(4) { transition-delay: 0.55s; }
+        .reveal.active > *:nth-child(5) { transition-delay: 0.7s; }
+        .reveal.active > *:nth-child(6) { transition-delay: 0.85s; }
+        .reveal.active > *:nth-child(7) { transition-delay: 1s; }
 
         .mempelai-container { display: flex; flex-direction: column; gap: 50px; margin-top: 30px; align-items: center; }
         .mempelai-item { max-width: 320px; position: relative; }
-        .mempelai-foto { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 0 8px rgba(197, 165, 114, 0.1); margin-bottom: 25px; transition: 0.6s; cursor: pointer; }
-        .mempelai-foto:hover { transform: scale(1.03); box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 0 8px rgba(197, 165, 114, 0.2); }
+        .mempelai-foto { width: 240px; height: 320px; border-radius: 200px 200px 8px 8px; object-fit: cover; border: 2px solid var(--primary); box-shadow: 0 15px 40px rgba(0,0,0,0.6); margin-bottom: 25px; transition: all 0.8s var(--ease-luxe); cursor: pointer; filter: grayscale(20%); animation: floatSoft 6s ease-in-out infinite; }
+        .mempelai-item:nth-child(2) .mempelai-foto { animation-delay: -3s; }
+        .mempelai-foto:hover { transform: scale(1.03) translateY(-5px); filter: grayscale(0%); box-shadow: 0 25px 60px rgba(197, 165, 114, 0.4); border-color: var(--secondary); }
+        @keyframes floatSoft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         .mempelai-item h3 { font-size: 2.2rem; color: var(--white); margin-bottom: 10px; font-weight: 600; font-style: italic; }
         .mempelai-item .ortu { font-size: 0.85rem; color: #a0a0a0; margin-top: 15px; line-height: 1.7; font-family: 'Montserrat', sans-serif; font-weight: 300; }
 
-        .countdown { display: flex; gap: 10px; margin-top: 35px; justify-content: center; }
-        .countdown-box { background: linear-gradient(145deg, var(--bg-surface), var(--bg-alt)); padding: 15px 20px; border-radius: 8px; box-shadow: 5px 5px 15px rgba(0,0,0,0.5), -5px -5px 15px rgba(255,255,255,0.02); min-width: 75px; border: 1px solid rgba(197, 165, 114, 0.2); }
-        .countdown-box .angka { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--primary); font-weight: 600; line-height: 1; }
+        .countdown { display: flex; gap: 10px; margin-top: 35px; justify-content: center; flex-wrap: wrap; }
+        .countdown-box { background: linear-gradient(145deg, var(--bg-surface), var(--bg-alt)); padding: 15px 20px; border-radius: 8px; box-shadow: 5px 5px 15px rgba(0,0,0,0.5), -5px -5px 15px rgba(255,255,255,0.02); min-width: 75px; border: 1px solid rgba(197, 165, 114, 0.2); transition: all 0.5s var(--ease-luxe); position: relative; overflow: hidden; }
+        .countdown-box:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(197, 165, 114, 0.2); }
+        .countdown-box .angka { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--primary); font-weight: 600; line-height: 1; transition: transform 0.4s var(--ease-luxe); }
         .countdown-box .label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; color: var(--secondary); margin-top: 5px; opacity: 0.8; }
 
-        .event-card { background: linear-gradient(145deg, rgba(20, 20, 20, 0.8), rgba(10, 10, 10, 0.9)); padding: 35px 25px; border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(197, 165, 114, 0.2); width: 100%; max-width: 420px; margin-top: 35px; position: relative; }
+        .event-card { background: linear-gradient(145deg, rgba(20, 20, 20, 0.8), rgba(10, 10, 10, 0.9)); padding: 35px 25px; border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(197, 165, 114, 0.2); width: 100%; max-width: 420px; margin-top: 35px; position: relative; transition: all 0.6s var(--ease-luxe); }
         .event-card::before { content: '❦'; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: var(--bg-dark); padding: 0 15px; color: var(--primary); font-size: 1.2rem; }
+        .event-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(0,0,0,0.6); }
         .event-card h3 { font-size: 1.8rem; color: var(--primary); margin-bottom: 15px; font-style: italic; }
         .event-card p { font-size: 0.9rem; line-height: 1.8; color: #ccc; }
 
-        .maps-card { margin-top: 35px; width: 100%; max-width: 420px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(197, 165, 114, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        .maps-card { margin-top: 35px; width: 100%; max-width: 420px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(197, 165, 114, 0.3); box-shadow: 0 15px 40px rgba(0,0,0,0.5); transition: all 0.5s var(--ease-luxe); }
+        .maps-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 20px 50px rgba(197, 165, 114, 0.2); }
         .maps-card iframe { width: 100%; height: 250px; border: 0; filter: grayscale(40%) invert(90%) contrast(85%); }
-        .btn-maps { display: inline-block; text-decoration: none; background: var(--bg-surface); color: var(--primary); padding: 12px 25px; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; width: 100%; border-top: 1px solid var(--border-color); font-weight: 500; font-family: 'Montserrat', sans-serif; }
+        .btn-maps { display: inline-block; text-decoration: none; background: var(--bg-surface); color: var(--primary); padding: 12px 25px; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; width: 100%; border-top: 1px solid var(--border-color); font-weight: 500; font-family: 'Montserrat', sans-serif; transition: all 0.4s ease; }
         .btn-maps:hover { background: var(--primary); color: var(--bg-dark); }
 
-        .grid-gallery { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 450px; margin-top: 25px; }
-        .grid-gallery img { width: 100%; height: auto; max-height: 600px; object-fit: contain; border-radius: 6px; transition: 0.6s; cursor: pointer; filter: grayscale(30%) brightness(0.85); box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid rgba(197, 165, 114, 0.15); background: var(--bg-surface); }
-        .grid-gallery img:hover { transform: scale(1.01); filter: grayscale(0%) brightness(1); box-shadow: 0 15px 35px rgba(0,0,0,0.6); border-color: var(--primary); }
+        .grid-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; width: 100%; max-width: 600px; margin-top: 25px; }
+        .grid-gallery img { width: 100%; height: 250px; object-fit: cover; border-radius: 4px; transition: all 0.8s var(--ease-luxe); cursor: pointer; filter: grayscale(40%) brightness(0.8); box-shadow: 0 10px 25px rgba(0,0,0,0.4); border: 1px solid rgba(197, 165, 114, 0.15); opacity: 0; transform: translateY(20px) scale(0.95); }
+        .grid-gallery img.visible { opacity: 1; transform: translateY(0) scale(1); }
+        .grid-gallery img:hover { transform: scale(1.04) translateY(-5px); filter: grayscale(0%) brightness(1); box-shadow: 0 20px 40px rgba(0,0,0,0.6); border-color: var(--primary); }
 
         .doa-section { margin-top: 60px; max-width: 700px; padding: 0 20px; }
-        .doa-arabic { font-size: 1.9rem; color: var(--secondary); margin-bottom: 20px; line-height: 2.2; direction: rtl; font-weight: 400; }
+        .doa-arabic { font-size: 1.9rem; color: var(--secondary); margin-bottom: 20px; line-height: 2.2; direction: rtl; font-weight: 400; text-shadow: 0 0 30px rgba(230, 207, 168, 0.2); }
         .doa-translate { font-size: 0.85rem; color: #ccc; font-style: italic; line-height: 1.7; margin-bottom: 10px; }
 
         .bank-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 35px; width: 100%; max-width: 800px; }
-        .bank-card { background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.95)); padding: 30px 25px; border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(197, 165, 114, 0.2); width: 100%; max-width: 340px; text-align: center; transition: 0.4s; display: flex; flex-direction: column; align-items: center; }
-        .bank-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .bank-card { background: linear-gradient(145deg, rgba(20, 20, 20, 0.9), rgba(10, 10, 10, 0.95)); padding: 30px 25px; border-radius: 8px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid rgba(197, 165, 114, 0.2); width: 100%; max-width: 340px; text-align: center; transition: all 0.6s var(--ease-luxe); display: flex; flex-direction: column; align-items: center; }
+        .bank-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 25px 60px rgba(197, 165, 114, 0.25); }
         .bank-logo-img { width: 100px; height: auto; max-height: 70px; object-fit: contain; margin-bottom: 20px; filter: brightness(1.2); }
         .bank-text-logo { font-size: 1.2rem; color: var(--primary); letter-spacing: 3px; font-weight: 700; margin-bottom: 15px; font-family: 'Montserrat', sans-serif; }
         .bank-number { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--white); margin: 5px 0 10px; letter-spacing: 1.5px; font-weight: 600; }
         .bank-name { font-size: 0.95rem; color: #ddd; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; }
-        .btn-copy { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 10px 25px; cursor: pointer; border-radius: 4px; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; font-family: 'Montserrat', sans-serif; width: 100%; max-width: 200px; }
-        .btn-copy:hover { background: var(--primary); color: var(--bg-dark); }
+        .btn-copy { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 10px 25px; cursor: pointer; border-radius: 4px; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.4s var(--ease-luxe); font-family: 'Montserrat', sans-serif; width: 100%; max-width: 200px; }
+        .btn-copy:hover { background: var(--primary); color: var(--bg-dark); letter-spacing: 3px; }
+        .btn-copy.copied { background: var(--primary); color: var(--bg-dark); }
+        .btn-copy.copied::after { content: ' ✓'; }
 
-        /* CSS TAMBAHAN: Tampilan Ikon Sosial Media */
         .social-media-section { margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(197, 165, 114, 0.2); display: flex; flex-direction: column; align-items: center; }
         .social-media-section h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--primary); font-style: italic; margin-bottom: 20px; }
         .social-icons { display: flex; gap: 20px; }
-        .social-icons a { width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; text-decoration: none; transition: 0.4s; }
-        .social-icons a:hover { background: var(--primary); color: var(--bg-dark); transform: translateY(-4px); box-shadow: 0 5px 15px rgba(197, 165, 114, 0.3); }
+        .social-icons a { width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; text-decoration: none; transition: all 0.5s var(--ease-luxe); }
+        .social-icons a:hover { color: var(--bg-dark); background: var(--primary); transform: translateY(-6px) scale(1.1); box-shadow: 0 10px 25px rgba(197, 165, 114, 0.4); }
         .footer-credit { margin-top: 40px; font-size: 0.7rem; color: #666; letter-spacing: 2px; text-transform: uppercase; }
 
-        #edit-panel { position: fixed; top: 0; left: 0; width: 300px; height: 100vh; background: var(--bg-surface); box-shadow: 2px 0 30px rgba(0,0,0,0.5); padding: 30px; transform: translateX(-100%); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1003; border-right: 1px solid var(--primary); overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+        #edit-panel { position: fixed; top: 0; left: 0; width: 300px; height: 100vh; background: var(--bg-surface); box-shadow: 2px 0 30px rgba(0,0,0,0.5); padding: 30px; transform: translateX(-100%); transition: transform 0.5s var(--ease-luxe); z-index: 1003; border-right: 1px solid var(--primary); overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
         #edit-panel.active { transform: translateX(0); }
         .edit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
         .edit-header h3 { color: var(--primary); font-size: 1.3rem; }
@@ -115,125 +151,90 @@
         .edit-group label { display: block; font-size: 0.75rem; margin-bottom: 8px; color: var(--primary); font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
         .edit-group input, .edit-group textarea, .edit-group select { width: 100%; padding: 10px; border: 1px solid var(--border-color); font-size: 0.85rem; border-radius: 3px; background: var(--bg-dark); color: var(--white); }
         .btn-save { background: var(--primary); color: var(--bg-dark); border: none; padding: 15px; width: 100%; cursor: pointer; margin-top: 20px; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; font-weight: 700; }
-        .btn-save:hover { background: var(--secondary); }
 
         body.editing-text .editable { outline: 1px dashed var(--primary) !important; outline-offset: 4px; background: rgba(197, 165, 114, 0.1); cursor: text; border-radius: 2px; }
-        body.editing-text .editable:hover { background: rgba(197, 165, 114, 0.2); }
 
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 900px; width: 100%; margin-top: 40px; }
         form input, form select, form textarea { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 4px; background: var(--bg-surface); color: var(--white); font-size: 16px; font-family: 'Montserrat', sans-serif; font-weight: 300; }
         form input:focus, form select:focus, form textarea:focus { outline: none; border-color: var(--primary); }
-        .btn-submit { background: var(--primary); color: var(--bg-dark); border: none; padding: 15px 40px; cursor: pointer; border-radius: 4px; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; width: 100%; font-weight: 700; font-family: 'Montserrat', sans-serif; }
-        .btn-submit:hover { background: var(--secondary); }
-        .komen-box { background: linear-gradient(145deg, var(--bg-surface), var(--bg-alt)); padding: 20px; border-radius: 6px; margin-bottom: 15px; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid rgba(197, 165, 114, 0.1); }
+        .btn-submit { background: var(--primary); color: var(--bg-dark); border: none; padding: 15px 40px; cursor: pointer; border-radius: 4px; font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; width: 100%; font-weight: 700; font-family: 'Montserrat', sans-serif; transition: all 0.4s var(--ease-luxe); }
+        .btn-submit:hover { background: var(--secondary); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(197, 165, 114, 0.4); }
+        .komen-box { background: linear-gradient(145deg, var(--bg-surface), var(--bg-alt)); padding: 20px; border-radius: 6px; margin-bottom: 15px; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid rgba(197, 165, 114, 0.1); opacity: 0; transform: translateY(20px); animation: commentIn 0.6s var(--ease-luxe) forwards; }
+        @keyframes commentIn { to { opacity: 1; transform: translateY(0); } }
         .komen-box strong { color: var(--primary); font-weight: 600; display: block; margin-bottom: 5px; font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; }
         .komen-box .status-hadir { font-size: 0.7rem; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; }
         .komen-box p { font-size: 0.9rem; color: #ccc; margin: 0; line-height: 1.6; font-weight: 300; }
 
         .main-title-container { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; margin: 20px 0; }
-        .main-name { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 600; line-height: 1.1; letter-spacing: 2px; background: linear-gradient(45deg, #8B7355, #C5A572, #FDFBF7, #C5A572, #8B7355); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 10px 30px rgba(0,0,0,0.5); font-style: italic; }
+        .main-name { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 600; line-height: 1.1; letter-spacing: 2px; background: linear-gradient(45deg, #8B7355, #C5A572, #FDFBF7, #C5A572, #8B7355); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 10px 30px rgba(0,0,0,0.5); font-style: italic; background-size: 200% auto; animation: shimmerText 5s linear infinite; }
+        @keyframes shimmerText { to { background-position: 200% center; } }
         .ampersand { font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: var(--primary); font-style: italic; font-weight: 400; margin: -15px 0; }
 
         .lightbox { display: none; position: fixed; z-index: 10010; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); justify-content: center; align-items: center; cursor: pointer; padding: 20px; }
         .lightbox.active { display: flex; }
-        .lightbox img { max-width: 90%; max-height: 90vh; border-radius: 5px; border: 2px solid var(--primary); box-shadow: 0 10px 50px rgba(0,0,0,0.8); animation: zoomIn 0.4s ease; }
-        .lightbox-close { position: absolute; top: 20px; right: 35px; color: var(--primary); font-size: 40px; font-weight: bold; transition: 0.3s; }
+        .lightbox img { max-width: 90%; max-height: 90vh; border-radius: 5px; border: 2px solid var(--primary); box-shadow: 0 10px 50px rgba(0,0,0,0.8); }
+        .lightbox-close { position: absolute; top: 20px; right: 35px; color: var(--primary); font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer; }
 
         @media (min-width: 768px) { 
             .grid-2 { grid-template-columns: 1fr 1fr; } 
-            .grid-gallery { max-width: 600px; } 
+            .grid-gallery { grid-template-columns: repeat(3, 1fr); } 
             .cover-content h1 { font-size: 6rem; } 
             .main-name { font-size: 7rem; } 
             .ampersand { font-size: 5rem; }
-            .mempelai-foto { width: 240px; height: 240px; }
-            #content-wrapper { background-attachment: fixed; }
+            .mempelai-foto { width: 280px; height: 380px; }
         }
         @keyframes elegantFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         #sparkle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; }
+
+        .ripple { position: absolute; border-radius: 50%; background: rgba(197, 165, 114, 0.5); transform: scale(0); animation: rippleEffect 0.7s var(--ease-luxe); pointer-events: none; }
+        @keyframes rippleEffect { to { transform: scale(4); opacity: 0; } }
     </style>
 </head>
 <body>
+
+    <div id="preloader">
+        <div class="preloader-ring"></div>
+        <div class="preloader-text">Memuat Undangan...</div>
+    </div>
+
+    <div id="scroll-progress"></div>
 
     <audio id="bg-music" loop playsinline></audio>
     <canvas id="sparkle-canvas"></canvas>
     <div class="frame-border" id="frame-border"></div>
 
-    <div id="lightbox" class="lightbox" data-lenis-prevent onclick="closeLightbox(event)">
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
         <span class="lightbox-close" onclick="closeLightbox(event, true)">&times;</span>
         <img id="lightbox-img" src="" alt="Zoomed Photo">
     </div>
 
     <div id="edit-toggle" onclick="toggleEditPanel()"><i class="fas fa-cog"></i></div>
 
+    <!-- TAMBAHKAN data-lenis-prevent DI SINI UNTUK MENGIZINKAN SCROLL DI PANEL -->
     <div id="edit-panel" data-lenis-prevent>
         <div class="edit-header">
             <h3>Pengaturan Database</h3>
             <button onclick="toggleEditPanel()" style="background:none; border:none; font-size:1.8rem; cursor:pointer; color:var(--primary);">&times;</button>
         </div>
         <div class="edit-group">
-            <button class="btn-edit-text" id="btn-edit-mode" onclick="toggleTextEditMode()" style="width: 100%; padding: 10px; background: transparent; border: 1px solid var(--secondary); color: var(--secondary); cursor: pointer; text-transform: uppercase; font-size: 0.8rem; border-radius: 4px;">Aktifkan Edit Teks</button>
-            <p style="font-size: 0.7rem; color: #888; margin-top: 10px; line-height: 1.5;">Klik tombol di atas, lalu klik teks di undangan (termasuk link sosial media) untuk mengubahnya. Klik kembali untuk mengunci & simpan.</p>
+            <button id="btn-edit-mode" onclick="toggleTextEditMode()" style="width: 100%; padding: 10px; background: transparent; border: 1px solid var(--secondary); color: var(--secondary); cursor: pointer; text-transform: uppercase; font-size: 0.8rem; border-radius: 4px;">Aktifkan Edit Teks</button>
         </div>
         <hr style="margin: 25px 0; border-color: var(--border-color);">
-        
-        <div class="edit-group">
-            <label>Foto Halaman Depan (Cover)</label>
-            <input type="file" accept="image/*" onchange="uploadCoverPhoto(event)">
-        </div>
-        <div class="edit-group">
-            <label>Upload Musik MP3</label>
-            <input type="file" accept="audio/mpeg, audio/mp3" onchange="uploadMusic(event)">
-        </div>
-        
+        <div class="edit-group"><label>Foto Halaman Depan (Cover)</label><input type="file" accept="image/*" onchange="uploadCoverPhoto(event)"></div>
+        <div class="edit-group"><label>Upload Musik MP3</label><input type="file" accept="audio/mpeg, audio/mp3" onchange="uploadMusic(event)"></div>
         <hr style="margin: 25px 0; border-color: var(--border-color);">
-        
-        <div class="edit-group">
-            <label>Foto Mempelai Pria</label>
-            <input type="file" accept="image/*" onchange="uploadImage(event, 'foto-pria', 'groom_photo')">
-        </div>
-        <div class="edit-group">
-            <label>Nama Mempelai Pria</label>
-            <input type="text" id="edit-pria" oninput="updateText('pria', this.value); saveDataToDB()">
-        </div>
-        <div class="edit-group">
-            <label>No. Rekening Mempelai Pria</label>
-            <input type="text" id="edit-rek-pria" oninput="document.getElementById('rek-pria').innerText=this.value; saveDataToDB()">
-        </div>
-        <div class="edit-group">
-            <label>Upload Logo Bank Pria</label>
-            <input type="file" accept="image/*" onchange="uploadImage(event, 'logo-pria', 'groom_bank_logo')">
-        </div>
-        
+        <div class="edit-group"><label>Foto Mempelai Pria</label><input type="file" accept="image/*" onchange="uploadImage(event, 'foto-pria', 'groom_photo')"></div>
+        <div class="edit-group"><label>Nama Mempelai Pria</label><input type="text" id="edit-pria" oninput="updateText('pria', this.value); saveDataToDB()"></div>
+        <div class="edit-group"><label>No. Rekening Mempelai Pria</label><input type="text" id="edit-rek-pria" oninput="document.getElementById('rek-pria').innerText=this.value; saveDataToDB()"></div>
+        <div class="edit-group"><label>Upload Logo Bank Pria</label><input type="file" accept="image/*" onchange="uploadImage(event, 'logo-pria', 'groom_bank_logo')"></div>
         <hr style="margin: 25px 0; border-color: var(--border-color);">
-        
-        <div class="edit-group">
-            <label>Foto Mempelai Wanita</label>
-            <input type="file" accept="image/*" onchange="uploadImage(event, 'foto-wanita', 'bride_photo')">
-        </div>
-        <div class="edit-group">
-            <label>Nama Mempelai Wanita</label>
-            <input type="text" id="edit-wanita" oninput="updateText('wanita', this.value); saveDataToDB()">
-        </div>
-        <div class="edit-group">
-            <label>No. Rekening Mempelai Wanita</label>
-            <input type="text" id="edit-rek-wanita" oninput="document.getElementById('rek-wanita').innerText=this.value; saveDataToDB()">
-        </div>
-        <div class="edit-group">
-            <label>Upload Logo Bank Wanita</label>
-            <input type="file" accept="image/*" onchange="uploadImage(event, 'logo-wanita', 'bride_bank_logo')">
-        </div>
-        
+        <div class="edit-group"><label>Foto Mempelai Wanita</label><input type="file" accept="image/*" onchange="uploadImage(event, 'foto-wanita', 'bride_photo')"></div>
+        <div class="edit-group"><label>Nama Mempelai Wanita</label><input type="text" id="edit-wanita" oninput="updateText('wanita', this.value); saveDataToDB()"></div>
+        <div class="edit-group"><label>No. Rekening Mempelai Wanita</label><input type="text" id="edit-rek-wanita" oninput="document.getElementById('rek-wanita').innerText=this.value; saveDataToDB()"></div>
+        <div class="edit-group"><label>Upload Logo Bank Wanita</label><input type="file" accept="image/*" onchange="uploadImage(event, 'logo-wanita', 'bride_bank_logo')"></div>
         <hr style="margin: 25px 0; border-color: var(--border-color);">
-        
-        <div class="edit-group">
-            <label>Tanggal Akad (Hitung Mundur)</label>
-            <input type="datetime-local" id="edit-date" onchange="setCountdown(this.value); saveDataToDB()">
-        </div>
-        <div class="edit-group">
-            <label>Upload Foto Galeri (Multiple)</label>
-            <input type="file" accept="image/*" multiple onchange="uploadGallery(event)">
-        </div>
+        <div class="edit-group"><label>Tanggal Akad (Hitung Mundur)</label><input type="datetime-local" id="edit-date" onchange="setCountdown(this.value); saveDataToDB()"></div>
+        <div class="edit-group"><label>Upload Foto Galeri (Multiple)</label><input type="file" accept="image/*" multiple onchange="uploadGallery(event)"></div>
         <button class="btn-save" onclick="toggleEditPanel()">Tutup Panel</button>
     </div>
 
@@ -244,7 +245,7 @@
             <div class="to">Kepada Yth.</div>
             <span class="nama-tamu editable" id="nama-tamu">Bapak/Ibu/Saudara/i</span>
             <div class="di-tempat editable">Tamu Undangan</div>
-            <button class="btn-buka" onclick="bukaUndangan()">Buka Undangan</button>
+            <button class="btn-buka" onclick="bukaUndangan(event)">Buka Undangan</button>
         </div>
     </div>
 
@@ -269,22 +270,24 @@
                     <span class="main-name editable" id="home-wanita">Suci</span>
                 </div>
                 <div class="decoration editable">❦</div>
+                <p class="editable" style="font-size: 0.85rem; color: #ccc; margin-top: 20px;">Kami bermaksud memohon ridho dan doa restu Bapak/Ibu/Saudara/i untuk melangsungkan pernikahan putra-putri kami.</p>
             </div>
         </div>
 
         <div class="section section-bg-alt" id="mempelai">
             <div class="reveal">
+                <span class="sub-title editable">The Bride & Groom</span>
                 <div class="mempelai-container">
                     <div class="mempelai-item">
-                        <span class="sub-title editable">The Groom</span>
                         <img id="foto-pria" src="" class="mempelai-foto" alt="Pria" onclick="openLightbox(this.src)">
                         <h3 class="editable" id="nama-pria-display">Fahri Maulana Yusuf</h3>
+                        <span class="sub-title editable" style="margin-top: 5px;">The Groom</span>
                         <p class="ortu editable">Putra Ketiga dari<br>Bapak Hendi Sunandi &<br>Ibu Ratna Suminar</p>
                     </div>
                     <div class="mempelai-item">
-                        <span class="sub-title editable">The Bride</span>
                         <img id="foto-wanita" src="" class="mempelai-foto" alt="Wanita" onclick="openLightbox(this.src)">
                         <h3 class="editable" id="nama-wanita-display">Suci Santika Anggraeni</h3>
+                        <span class="sub-title editable" style="margin-top: 5px;">The Bride</span>
                         <p class="ortu editable">Putri Pertama dari<br>Bapak Didin Saripudin &<br>Ibu Listinawangsih</p>
                     </div>
                 </div>
@@ -306,7 +309,6 @@
                     <h3 class="editable">Akad Nikah</h3>
                     <p class="editable">Jum'at, 23 Januari 2026<br>Pukul: 08.00 WIB</p>
                 </div>
-                
                 <div class="maps-card">
                     <iframe src="https://www.google.com/maps?q=Monas+Jakarta&output=embed" allowfullscreen="" loading="lazy"></iframe>
                     <a href="https://www.google.com/maps?q=Monas+Jakarta" target="_blank" class="btn-maps">Lihat Lokasi Maps</a>
@@ -338,14 +340,14 @@
                         <img id="logo-pria" src="" class="bank-logo-img" style="display: none;" alt="Logo Bank">
                         <p class="bank-number" id="rek-pria">9000008690043</p>
                         <p class="bank-name editable">a.n. Fahri Maulana Yusuf</p>
-                        <button class="btn-copy" onclick="copyRekening('rek-pria')"><i class="fas fa-copy"></i> Salin Rekening</button>
+                        <button class="btn-copy" onclick="copyRekening('rek-pria', this)"><i class="fas fa-copy"></i> Salin Rekening</button>
                     </div>
                     <div class="bank-card">
                         <div id="logo-wanita-text" class="bank-text-logo editable">BANK BRI</div>
                         <img id="logo-wanita" src="" class="bank-logo-img" style="display: none;" alt="Logo Bank">
                         <p class="bank-number" id="rek-wanita">078701008585503</p>
                         <p class="bank-name editable">a.n. Suci Santika Anggraeni</p>
-                        <button class="btn-copy" onclick="copyRekening('rek-wanita')"><i class="fas fa-copy"></i> Salin Rekening</button>
+                        <button class="btn-copy" onclick="copyRekening('rek-wanita', this)"><i class="fas fa-copy"></i> Salin Rekening</button>
                     </div>
                 </div>
             </div>
@@ -369,10 +371,9 @@
                             <button type="submit" class="btn-submit">Kirim Ucapan</button>
                         </form>
                     </div>
+                    <!-- TAMBAHKAN data-lenis-prevent DI SINI UNTUK MENGIZINKAN SCROLL DI KOMENTAR -->
                     <div id="komentar-list" data-lenis-prevent style="max-height: 450px; overflow-y: auto; padding-right: 10px;"></div>
                 </div>
-                
-                <!-- TAMBAHAN: Bagian Sosial Media di bagian bawah undangan -->
                 <div class="social-media-section">
                     <h3 class="editable">Follow Our Journey</h3>
                     <div class="social-icons">
@@ -383,107 +384,217 @@
                     </div>
                     <p class="footer-credit editable">Made with ❤️ by Fahri & Suci</p>
                 </div>
-
             </div>
         </div>
     </div>
 
     <script>
-        // ===== KONFIGURASI SUPABASE =====
+        // ===== KONFIGURASI & KEAMANAN LOAD =====
         const SUPABASE_URL = "https://xoiotomgebtszexuknfb.supabase.co"; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvaW90b21nZWJ0c3pleHVrbmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MzAxODQsImV4cCI6MjEwNDIwNjE4NH0.Qh1bnauDEMFE-gN7m-rYc5lPsOmvfDjMAMO6yD34CR4"; 
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const INVITATION_ID = "a1b2c3d4-e5f6-7890-1234-567890abcdef";
         const BUCKET_NAME = "wedding-assets";
 
-        // ===== SMOOTH SCROLL =====
-        const lenis = new Lenis({ duration: 1.4, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); } requestAnimationFrame(raf);
+        let sb = null;
+        if (typeof supabase !== 'undefined') {
+            try {
+                sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            } catch (e) {
+                console.warn("Supabase init error:", e);
+            }
+        }
+
+        let lenis = { on: () => {}, stop: () => {}, start: () => {}, raf: () => {}, scrollTo: (t) => { const el = document.querySelector(t); if(el) el.scrollIntoView({behavior:'smooth'}); } };
+        if (typeof Lenis !== 'undefined') {
+            try {
+                lenis = new Lenis({ duration: 1.8, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+                function raf(time) { lenis.raf(time); requestAnimationFrame(raf); } 
+                requestAnimationFrame(raf);
+            } catch (e) {
+                console.warn("Lenis init error:", e);
+            }
+        }
+
+        setTimeout(() => {
+            const pre = document.getElementById('preloader');
+            if (pre) pre.classList.add('hidden');
+        }, 2500);
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const pre = document.getElementById('preloader');
+                if (pre) pre.classList.add('hidden');
+            }, 500);
+        });
 
         const urlParams = new URLSearchParams(window.location.search);
         const isShareMode = urlParams.get('share') === 'true';
         const namaTamu = urlParams.get('to');
-        if (isShareMode) { document.getElementById('edit-toggle').style.display = 'none'; document.getElementById('music-btn').style.display = 'none'; }
+        if (isShareMode) { 
+            document.getElementById('edit-toggle').style.display = 'none'; 
+            document.getElementById('music-btn').style.display = 'none'; 
+        }
         if (namaTamu) document.getElementById('nama-tamu').innerText = decodeURIComponent(namaTamu);
 
-        // ===== FUNGSI TOMBOL KEMBALI HP =====
-        window.history.pushState({ page: 'content' }, '', '');
-        window.addEventListener('popstate', function(event) {
-            const contentWrapper = document.getElementById('content-wrapper');
-            const cover = document.getElementById('cover');
-            if (contentWrapper.style.display === 'block') {
-                contentWrapper.style.display = 'none';
-                cover.style.opacity = '1';
-                cover.style.visibility = 'visible';
-                document.getElementById('navbar').style.opacity = '0';
-                document.getElementById('frame-border').classList.remove('active');
-                if (isPlaying) { music.pause(); isPlaying = false; }
-                window.history.pushState({ page: 'cover' }, '', '');
-            } else {
-                window.history.back();
-            }
-        });
-
-        function bukaUndangan() {
+        function bukaUndangan(e) {
+            if (e) createRipple(e);
             document.getElementById('cover').style.opacity = '0';
             document.getElementById('cover').style.visibility = 'hidden';
-            document.getElementById('content-wrapper').style.display = 'block';
-            document.getElementById('navbar').style.opacity = '1';
+            const cw = document.getElementById('content-wrapper');
+            cw.style.display = 'block';
+            setTimeout(() => cw.classList.add('show'), 50);
+            
+            document.getElementById('navbar').classList.add('show');
             document.getElementById('frame-border').classList.add('active');
             if (!isShareMode) { document.getElementById('music-btn').classList.add('show-btn'); playMusic(); }
+            
             startRevealAnimation(); startCountdown(); startSparkleEffect(); loadRSVP();
-            window.history.pushState({ page: 'invitation_open' }, '', '');
+            observeGallery();
+        }
+
+        function createRipple(e) {
+            if(!e || !e.currentTarget) return;
+            const btn = e.currentTarget;
+            if (!btn.getBoundingClientRect) return;
+            const rect = btn.getBoundingClientRect();
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = size + 'px';
+            if (e.clientX !== undefined) {
+                ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+            }
+            btn.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 700);
         }
 
         const music = document.getElementById('bg-music');
         let isPlaying = false;
-        function playMusic() { music.play().then(() => isPlaying = true).catch(err => isPlaying = false); }
-        function toggleMusic(e) { e.preventDefault(); if (isPlaying) { music.pause(); isPlaying = false; } else { music.play().then(() => isPlaying = true).catch(err => alert("Klik lagi untuk memutar musik.")); } }
+        function playMusic() { 
+            music.play().then(() => { isPlaying = true; }).catch(err => isPlaying = false); 
+        }
+        function toggleMusic(e) { 
+            e.preventDefault(); 
+            if (isPlaying) { music.pause(); isPlaying = false; } 
+            else { music.play().then(() => isPlaying = true).catch(err => alert("Klik lagi untuk memutar musik.")); } 
+        }
 
         let targetDate = new Date("2026-01-23T08:00:00").getTime();
-        function setCountdown(dateVal) { targetDate = new Date(dateVal).getTime(); }
-        function startCountdown() { setInterval(() => { let d = targetDate - new Date().getTime(); if (d < 0) d = 0; document.getElementById('hari').innerText = String(Math.floor(d / 86400000)).padStart(2, '0'); document.getElementById('jam').innerText = String(Math.floor((d % 86400000) / 3600000)).padStart(2, '0'); document.getElementById('menit').innerText = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0'); document.getElementById('detik').innerText = String(Math.floor((d % 60000) / 1000)).padStart(2, '0'); }, 1000); }
+        function setCountdown(dateVal) { if(dateVal) targetDate = new Date(dateVal).getTime(); }
+        let lastDetik = -1, lastMenit = -1, lastJam = -1, lastHari = -1;
+        function startCountdown() {
+            setInterval(() => {
+                let d = targetDate - new Date().getTime();
+                if (d < 0) d = 0;
+                const h = String(Math.floor(d / 86400000)).padStart(2, '0');
+                const j = String(Math.floor((d % 86400000) / 3600000)).padStart(2, '0');
+                const m = String(Math.floor((d % 3600000) / 60000)).padStart(2, '0');
+                const s = String(Math.floor((d % 60000) / 1000)).padStart(2, '0');
+                if (h !== lastHari) { document.getElementById('hari').innerText = h; lastHari = h; }
+                if (j !== lastJam) { document.getElementById('jam').innerText = j; lastJam = j; }
+                if (m !== lastMenit) { document.getElementById('menit').innerText = m; lastMenit = m; }
+                if (s !== lastDetik) { document.getElementById('detik').innerText = s; lastDetik = s; }
+            }, 1000);
+        }
 
         function toggleEditPanel() { 
-            const panel = document.getElementById('edit-panel');
-            const isActive = panel.classList.toggle('active');
-            if (isActive) { lenis.stop(); } 
-            else { lenis.start(); }
+            const isActive = document.getElementById('edit-panel').classList.toggle('active');
+            if (isActive) { if(lenis.stop) lenis.stop(); } 
+            else { if(lenis.start) lenis.start(); }
         }
 
         function updateText(target, value) {
             const fnPria = document.getElementById('edit-pria').value.split(' ')[0];
             const fnWanita = document.getElementById('edit-wanita').value.split(' ')[0];
-            if (target === 'pria') { document.getElementById('home-pria').innerText = fnPria; document.getElementById('nama-pria-display').innerText = value; document.getElementById('cover-names').innerText = value + " & " + document.getElementById('edit-wanita').value; }
-            if (target === 'wanita') { document.getElementById('home-wanita').innerText = fnWanita; document.getElementById('nama-wanita-display').innerText = value; document.getElementById('cover-names').innerText = document.getElementById('edit-pria').value + " & " + value; }
+            if (target === 'pria') { 
+                document.getElementById('home-pria').innerText = fnPria; 
+                document.getElementById('nama-pria-display').innerText = value; 
+                document.getElementById('cover-names').innerText = value + " & " + document.getElementById('edit-wanita').value; 
+            }
+            if (target === 'wanita') { 
+                document.getElementById('home-wanita').innerText = fnWanita; 
+                document.getElementById('nama-wanita-display').innerText = value; 
+                document.getElementById('cover-names').innerText = document.getElementById('edit-pria').value + " & " + value; 
+            }
         }
-        function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('active'); lenis.stop(); }
-        function closeLightbox(e, force=false) { if (force || e.target.id === 'lightbox') { document.getElementById('lightbox').classList.remove('active'); lenis.start(); } }
-        function startRevealAnimation() { const obs = new IntersectionObserver((e) => { e.forEach(en => { if (en.isIntersecting) en.target.classList.add('active'); }); }, { threshold: 0.1 }); document.querySelectorAll('.reveal').forEach(r => obs.observe(r)); }
-        function copyRekening(id) { navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => alert("Tersalin!")); }
+        
+        function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('active'); if(lenis.stop) lenis.stop(); }
+        function closeLightbox(e, force=false) { if (force || e.target.id === 'lightbox') { document.getElementById('lightbox').classList.remove('active'); if(lenis.start) lenis.start(); } }
+        
+        function startRevealAnimation() { 
+            const obs = new IntersectionObserver((e) => { e.forEach(en => { if (en.isIntersecting) en.target.classList.add('active'); }); }, { threshold: 0.1 }); 
+            document.querySelectorAll('.reveal').forEach(r => obs.observe(r)); 
+        }
 
-        function startSparkleEffect() { const c = document.getElementById('sparkle-canvas'), ctx = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight; let s = [], m = 80; class S { constructor() { this.reset(); } reset() { this.x = Math.random()*c.width; this.y = Math.random()*-c.height; this.size = Math.random()*2.5+1; this.sY = Math.random()*1.5+0.5; this.sX = Math.random()*0.5-0.25; this.o = Math.random()*0.8+0.2; } update() { this.y += this.sY; this.x += this.sX; if (this.y > c.height) { this.reset(); this.y = -10; } } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, 6.28); ctx.fillStyle = `rgba(230,207,168,${this.o})`; ctx.shadowBlur = 15; ctx.shadowColor = 'rgba(197,165,114,1)'; ctx.fill(); ctx.closePath(); } } for(let i=0; i<m; i++) s.push(new S()); function anim() { ctx.clearRect(0,0,c.width,c.height); s.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); } anim(); }
+        function observeGallery() {
+            const imgs = document.querySelectorAll('#grid-gallery img');
+            if (imgs.length === 0) return;
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach((entry, idx) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => entry.target.classList.add('visible'), idx * 100);
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+            imgs.forEach(img => obs.observe(img));
+        }
 
-        // ===== FUNGSI UPLOAD FOTO HALAMAN DEPAN (COVER) =====
+        function copyRekening(id, btn) {
+            navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
+                btn.classList.add('copied');
+                setTimeout(() => btn.classList.remove('copied'), 2000);
+            });
+        }
+
+        function startSparkleEffect() {
+            const c = document.getElementById('sparkle-canvas'), ctx = c.getContext('2d');
+            c.width = innerWidth; c.height = innerHeight;
+            let s = [], m = 30;
+            class S {
+                constructor() { this.reset(); this.y = Math.random()*c.height; }
+                reset() {
+                    this.x = Math.random()*c.width; this.y = -10;
+                    this.size = Math.random()*4+2; this.sY = Math.random()*1+0.5;
+                    this.o = Math.random()*0.6+0.3; this.rot = Math.random() * 6.28; this.sR = Math.random() * 0.02 - 0.01;
+                }
+                update() {
+                    this.y += this.sY; this.x += Math.sin(this.y * 0.01) * 0.5; this.rot += this.sR;
+                    if (this.y > c.height) this.reset();
+                }
+                draw() {
+                    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rot);
+                    ctx.beginPath(); ctx.ellipse(0, 0, this.size, this.size * 0.5, 0, 0, 6.28); 
+                    ctx.fillStyle = `rgba(230,207,168,${this.o})`; ctx.fill(); ctx.restore();
+                }
+            }
+            for(let i=0; i<m; i++) s.push(new S());
+            function anim() {
+                ctx.clearRect(0,0,c.width,c.height);
+                s.forEach(p => { p.update(); p.draw(); });
+                requestAnimationFrame(anim);
+            }
+            anim();
+        }
+
         async function uploadCoverPhoto(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            if(!sb) return alert("Database tidak terhubung.");
+            const file = event.target.files[0]; if (!file) return;
             const filePath = `images/cover_bg_${Date.now()}_${file.name}`;
             const { error } = await sb.storage.from(BUCKET_NAME).upload(filePath, file);
-            if (error) { alert("Gagal upload foto cover: " + error.message); return; }
+            if (error) return alert("Gagal upload: " + error.message);
             const { data: pub } = sb.storage.from(BUCKET_NAME).getPublicUrl(filePath);
             document.getElementById('cover').style.backgroundImage = `url('${pub.publicUrl}')`;
             await sb.from('invitations').update({ cover_photo: pub.publicUrl }).eq('id', INVITATION_ID);
-            alert("Foto halaman depan berhasil diunggah!");
+            alert("Foto cover berhasil diunggah!");
         }
 
-        // ===== FUNGSI UPLOAD FILE KE SUPABASE STORAGE =====
         async function uploadImage(event, elementId, dbColumn) {
-            const file = event.target.files[0];
-            if (!file) return;
+            if(!sb) return alert("Database tidak terhubung.");
+            const file = event.target.files[0]; if (!file) return;
             const filePath = `images/${elementId}_${Date.now()}_${file.name}`;
             const { error } = await sb.storage.from(BUCKET_NAME).upload(filePath, file);
-            if (error) { alert("Gagal upload foto: " + error.message); return; }
+            if (error) return alert("Gagal upload: " + error.message);
             const { data: pub } = sb.storage.from(BUCKET_NAME).getPublicUrl(filePath);
             const imgEl = document.getElementById(elementId);
             imgEl.src = pub.publicUrl;
@@ -495,22 +606,20 @@
         }
 
         async function uploadMusic(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            if(!sb) return alert("Database tidak terhubung.");
+            const file = event.target.files[0]; if (!file) return;
             const filePath = `music/bg_music_${Date.now()}_${file.name}`;
             const { error } = await sb.storage.from(BUCKET_NAME).upload(filePath, file);
-            if (error) { alert("Gagal upload musik: " + error.message); return; }
+            if (error) return alert("Gagal upload musik: " + error.message);
             const { data: pub } = sb.storage.from(BUCKET_NAME).getPublicUrl(filePath);
-            music.src = pub.publicUrl;
-            music.load();
+            music.src = pub.publicUrl; music.load();
             await sb.from('invitations').update({ music_url: pub.publicUrl }).eq('id', INVITATION_ID);
             alert("Musik berhasil diunggah!");
         }
 
         async function uploadGallery(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-            const grid = document.getElementById('grid-gallery');
+            if(!sb) return alert("Database tidak terhubung.");
+            const files = event.target.files; if (!files || files.length === 0) return;
             const urls = [];
             for (let i = 0; i < files.length; i++) {
                 const filePath = `gallery/img_${Date.now()}_${i}_${files[i].name}`;
@@ -524,108 +633,126 @@
             loadDataFromDB();
         }
 
-        // ===== FUNGSI DATABASE SUPABASE =====
         async function loadDataFromDB() {
-            const { data, error } = await sb.from('invitations').select('*').eq('id', INVITATION_ID).single();
-            if (error) { console.error("Error loading data:", error); return; }
-            if (data) {
-                document.getElementById('cover-names').innerText = data.couple_name;
-                document.getElementById('edit-pria').value = data.groom_name;
-                document.getElementById('nama-pria-display').innerText = data.groom_name;
-                document.getElementById('home-pria').innerText = data.groom_name.split(' ')[0];
-                
-                document.getElementById('edit-wanita').value = data.bride_name;
-                document.getElementById('nama-wanita-display').innerText = data.bride_name;
-                document.getElementById('home-wanita').innerText = data.bride_name.split(' ')[0];
-                
-                document.getElementById('edit-rek-pria').value = data.groom_rek;
-                document.getElementById('rek-pria').innerText = data.groom_rek;
-                
-                document.getElementById('edit-rek-wanita').value = data.bride_rek;
-                document.getElementById('rek-wanita').innerText = data.bride_rek;
-
-                document.getElementById('foto-pria').src = data.groom_photo;
-                document.getElementById('foto-wanita').src = data.bride_photo;
-                music.src = data.music_url;
-
-                if (data.cover_photo) {
-                    document.getElementById('cover').style.backgroundImage = `url('${data.cover_photo}')`;
+            if (!sb) return;
+            try {
+                const { data, error } = await sb.from('invitations').select('*').eq('id', INVITATION_ID).single();
+                if (error) throw error;
+                if (data) {
+                    document.getElementById('cover-names').innerText = data.couple_name;
+                    document.getElementById('edit-pria').value = data.groom_name || '';
+                    document.getElementById('nama-pria-display').innerText = data.groom_name || '';
+                    document.getElementById('home-pria').innerText = (data.groom_name || '').split(' ')[0];
+                    document.getElementById('edit-wanita').value = data.bride_name || '';
+                    document.getElementById('nama-wanita-display').innerText = data.bride_name || '';
+                    document.getElementById('home-wanita').innerText = (data.bride_name || '').split(' ')[0];
+                    document.getElementById('edit-rek-pria').value = data.groom_rek || '';
+                    document.getElementById('rek-pria').innerText = data.groom_rek || '';
+                    document.getElementById('edit-rek-wanita').value = data.bride_rek || '';
+                    document.getElementById('rek-wanita').innerText = data.bride_rek || '';
+                    if(data.groom_photo) document.getElementById('foto-pria').src = data.groom_photo;
+                    if(data.bride_photo) document.getElementById('foto-wanita').src = data.bride_photo;
+                    if (data.music_url) music.src = data.music_url;
+                    if (data.cover_photo) document.getElementById('cover').style.backgroundImage = `url('${data.cover_photo}')`;
+                    if (data.groom_bank_logo) {
+                        document.getElementById('logo-pria').src = data.groom_bank_logo;
+                        document.getElementById('logo-pria').style.display = 'block';
+                        document.getElementById('logo-pria-text').style.display = 'none';
+                    }
+                    if (data.bride_bank_logo) {
+                        document.getElementById('logo-wanita').src = data.bride_bank_logo;
+                        document.getElementById('logo-wanita').style.display = 'block';
+                        document.getElementById('logo-wanita-text').style.display = 'none';
+                    }
+                    if (data.wedding_date) {
+                        const dateObj = new Date(data.wedding_date);
+                        const localDate = new Date(dateObj.getTime() - dateObj.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+                        document.getElementById('edit-date').value = localDate;
+                        setCountdown(localDate);
+                    }
+                    const grid = document.getElementById('grid-gallery');
+                    grid.innerHTML = '';
+                    if (data.gallery_urls && data.gallery_urls.length > 0) {
+                        data.gallery_urls.forEach(url => {
+                            const img = document.createElement('img');
+                            img.src = url;
+                            img.setAttribute('onclick', 'openLightbox(this.src)');
+                            grid.appendChild(img);
+                        });
+                        setTimeout(observeGallery, 200);
+                    }
+                    if (data.editable_texts) {
+                        Object.keys(data.editable_texts).forEach(key => {
+                            const el = document.getElementById(key) || document.querySelector(`.${key}`);
+                            if (el) el.innerHTML = data.editable_texts[key];
+                        });
+                    }
                 }
-
-                if (data.groom_bank_logo) {
-                    document.getElementById('logo-pria').src = data.groom_bank_logo;
-                    document.getElementById('logo-pria').style.display = 'block';
-                    document.getElementById('logo-pria-text').style.display = 'none';
-                }
-                if (data.bride_bank_logo) {
-                    document.getElementById('logo-wanita').src = data.bride_bank_logo;
-                    document.getElementById('logo-wanita').style.display = 'block';
-                    document.getElementById('logo-wanita-text').style.display = 'none';
-                }
-
-                const dateObj = new Date(data.wedding_date);
-                const localDate = new Date(dateObj.getTime() - dateObj.getTimezoneOffset() * 60000).toISOString().slice(0,16);
-                document.getElementById('edit-date').value = localDate;
-                setCountdown(localDate);
-
-                const grid = document.getElementById('grid-gallery');
-                grid.innerHTML = '';
-                if (data.gallery_urls) {
-                    data.gallery_urls.forEach(url => {
-                        const img = document.createElement('img');
-                        img.src = url;
-                        img.setAttribute('onclick', 'openLightbox(this.src)');
-                        grid.appendChild(img);
-                    });
-                }
-
-                if (data.editable_texts) {
-                    Object.keys(data.editable_texts).forEach(key => {
-                        const el = document.getElementById(key) || document.querySelector(`.${key}`);
-                        if (el) el.innerHTML = data.editable_texts[key];
-                    });
-                }
+            } catch (err) {
+                console.error("DB Load Error:", err);
             }
         }
 
         async function saveDataToDB() {
-            const updateData = {
-                couple_name: document.getElementById('edit-pria').value + " & " + document.getElementById('edit-wanita').value,
-                groom_name: document.getElementById('edit-pria').value,
-                bride_name: document.getElementById('edit-wanita').value,
-                groom_rek: document.getElementById('edit-rek-pria').value,
-                bride_rek: document.getElementById('edit-rek-wanita').value,
-                wedding_date: new Date(document.getElementById('edit-date').value).toISOString()
-            };
-            const { error } = await sb.from('invitations').update(updateData).eq('id', INVITATION_ID);
-            if (error) console.error("Error saving:", error);
+            if (!sb) return;
+            try {
+                const updateData = {
+                    couple_name: document.getElementById('edit-pria').value + " & " + document.getElementById('edit-wanita').value,
+                    groom_name: document.getElementById('edit-pria').value,
+                    bride_name: document.getElementById('edit-wanita').value,
+                    groom_rek: document.getElementById('edit-rek-pria').value,
+                    bride_rek: document.getElementById('edit-rek-wanita').value,
+                    wedding_date: new Date(document.getElementById('edit-date').value).toISOString()
+                };
+                const { error } = await sb.from('invitations').update(updateData).eq('id', INVITATION_ID);
+                if (error) throw error;
+            } catch (err) {
+                console.error("DB Save Error:", err);
+            }
         }
 
         async function submitRSVP(e) {
             e.preventDefault();
+            if(!sb) return alert("Database tidak terhubung.");
             const nama = document.getElementById('nama-komen').value;
             const hadir = document.getElementById('kehadiran-komen').value;
             const isi = document.getElementById('isi-komen').value;
-            const { error } = await sb.from('rsvp').insert([{ nama, kehadiran: hadir, pesan: isi }]);
-            if (!error) {
-                loadRSVP(); 
-                document.getElementById('nama-komen').value = '';
-                document.getElementById('kehadiran-komen').value = '';
-                document.getElementById('isi-komen').value = '';
-                alert('Ucapan berhasil dikirim!');
-            } else {
+            try {
+                const { error } = await sb.from('rsvp').insert([{ nama, kehadiran: hadir, pesan: isi }]);
+                if (!error) {
+                    loadRSVP(); 
+                    document.getElementById('nama-komen').value = '';
+                    document.getElementById('kehadiran-komen').value = '';
+                    document.getElementById('isi-komen').value = '';
+                    alert('Ucapan berhasil dikirim!');
+                } else {
+                    throw error;
+                }
+            } catch(err) {
                 alert('Gagal mengirim ucapan.');
             }
         }
 
         async function loadRSVP() {
-            const { data, error } = await sb.from('rsvp').select('*').order('created_at', { ascending: false });
+            if(!sb) return;
             const list = document.getElementById('komentar-list');
-            list.innerHTML = '';
-            if (data) {
-                data.forEach(row => {
-                    list.innerHTML += `<div class="komen-box"><strong>${row.nama}</strong><span class="status-hadir">${row.kehadiran}</span><p>${row.pesan}</p></div>`;
-                });
+            list.innerHTML = '<p style="text-align:center; color:#666;">Memuat ucapan...</p>';
+            try {
+                const { data, error } = await sb.from('rsvp').select('*').order('created_at', { ascending: false });
+                list.innerHTML = '';
+                if (data && data.length > 0) {
+                    data.forEach((row, idx) => {
+                        const box = document.createElement('div');
+                        box.className = 'komen-box';
+                        box.style.animationDelay = (idx * 0.1) + 's';
+                        box.innerHTML = `<strong>${row.nama}</strong><span class="status-hadir">${row.kehadiran}</span><p>${row.pesan}</p>`;
+                        list.appendChild(box);
+                    });
+                } else {
+                    list.innerHTML = '<p style="text-align:center; color:#666;">Belum ada ucapan.</p>';
+                }
+            } catch(err) {
+                list.innerHTML = '<p style="text-align:center; color:#666;">Gagal memuat ucapan.</p>';
             }
         }
 
@@ -639,14 +766,18 @@
         }
 
         async function saveEditableTextsToDB() {
+            if(!sb) return;
             const texts = {};
             document.querySelectorAll('.editable').forEach((el, index) => {
                 const key = el.id || `editable_${index}`;
                 texts[key] = el.innerHTML;
             });
-            const { error } = await sb.from('invitations').update({ editable_texts: texts }).eq('id', INVITATION_ID);
-            if (!error) alert("Teks berhasil disimpan ke database!");
-            else console.error("Gagal simpan teks:", error);
+            try {
+                const { error } = await sb.from('invitations').update({ editable_texts: texts }).eq('id', INVITATION_ID);
+                if (!error) alert("Teks berhasil disimpan ke database!");
+            } catch(err) {
+                console.error("Gagal simpan teks:", err);
+            }
         }
 
         loadDataFromDB();
