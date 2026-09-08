@@ -49,12 +49,17 @@
         .btn-buka { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 14px 35px; font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 4px; cursor: pointer; transition: all 0.5s var(--ease-luxe); text-transform: uppercase; margin-top: 35px; animation: elegantFade 1.5s ease 1.6s forwards; font-weight: 500; position: relative; overflow: hidden; opacity: 0; }
         .btn-buka:hover { background: var(--primary); color: var(--bg-dark); letter-spacing: 6px; box-shadow: 0 5px 25px rgba(197, 165, 114, 0.5); transform: translateY(-2px); }
 
-        #music-btn, #edit-toggle { position: fixed; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 1001; opacity: 0; transition: all 0.5s var(--ease-luxe); font-size: 1rem; text-decoration: none; }
-        #music-btn { top: max(15px, env(safe-area-inset-top)); right: 15px; background: var(--bg-surface); color: var(--primary); border: 1px solid var(--primary); }
-        #edit-toggle { top: max(15px, env(safe-area-inset-top)); left: 15px; background: var(--bg-surface); color: var(--primary); z-index: 1002; border: 1px solid var(--primary); opacity: 1; }
-        #edit-toggle:hover, #music-btn:hover { background: var(--primary); color: var(--bg-dark); transform: scale(1.1) rotate(15deg); }
+        /* ===== TOMBOL ATAS ===== */
+        #music-btn, #edit-toggle, #share-btn { position: fixed; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.5); transition: all 0.5s var(--ease-luxe); font-size: 1rem; text-decoration: none; background: var(--bg-surface); color: var(--primary); border: 1px solid var(--primary); }
+        
+        #edit-toggle { top: max(15px, env(safe-area-inset-top)); left: 15px; z-index: 1002; opacity: 1; }
+        #share-btn { top: max(15px, env(safe-area-inset-top)); right: 15px; z-index: 1002; opacity: 1; }
+        #music-btn { top: max(65px, env(safe-area-inset-top)); right: 15px; z-index: 1001; opacity: 0; }
+        
+        #edit-toggle:hover, #music-btn:hover, #share-btn:hover { background: var(--primary); color: var(--bg-dark); transform: scale(1.1) rotate(15deg); }
         .show-btn { opacity: 1 !important; }
 
+        /* ===== NAVBAR ===== */
         .navbar { position: fixed; bottom: max(15px, env(safe-area-inset-bottom)); left: 50%; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(15px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-radius: 50px; padding: 10px 25px; display: flex; gap: 25px; z-index: 1000; opacity: 0; transform: translateX(-50%) translateY(80px); transition: all 1s var(--ease-luxe); border: 1px solid var(--border-color); }
         .navbar.show { opacity: 1; transform: translateX(-50%) translateY(0); }
         .navbar a { color: var(--primary); font-size: 0.9rem; transition: all 0.4s var(--ease-luxe); position: relative; padding: 5px 8px; }
@@ -170,10 +175,20 @@
         @keyframes shimmerText { to { background-position: 200% center; } }
         .ampersand { font-family: 'Cormorant Garamond', serif; font-size: 3rem; color: var(--primary); font-style: italic; font-weight: 400; margin: -15px 0; }
 
+        /* ===== LIGHTBOX & ARROW NAVIGATION ===== */
         .lightbox { display: none; position: fixed; z-index: 10010; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); justify-content: center; align-items: center; cursor: pointer; padding: 20px; }
         .lightbox.active { display: flex; }
-        .lightbox img { max-width: 90%; max-height: 90vh; border-radius: 5px; border: 2px solid var(--primary); box-shadow: 0 10px 50px rgba(0,0,0,0.8); }
-        .lightbox-close { position: absolute; top: 20px; right: 35px; color: var(--primary); font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer; }
+        .lightbox img { max-width: 85%; max-height: 80vh; border-radius: 5px; border: 2px solid var(--primary); box-shadow: 0 10px 50px rgba(0,0,0,0.8); animation: zoomIn 0.4s var(--ease-luxe); }
+        .lightbox-close { position: absolute; top: 20px; right: 35px; color: var(--primary); font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer; z-index: 10012; }
+        .lightbox-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 2rem; cursor: pointer; padding: 15px 20px; z-index: 10011; transition: 0.3s ease; display: flex; align-items: center; justify-content: center; background: rgba(10, 10, 10, 0.6); border-radius: 50%; border: 1px solid var(--primary); width: 50px; height: 50px; }
+        .lightbox-arrow:hover { background: var(--primary); color: var(--bg-dark); }
+        .lightbox-arrow.prev { left: 20px; }
+        .lightbox-arrow.next { right: 20px; }
+        @media (max-width: 600px) { 
+            .lightbox-arrow { width: 40px; height: 40px; font-size: 1.5rem; padding: 0; }
+            .lightbox-arrow.prev { left: 10px; }
+            .lightbox-arrow.next { right: 10px; }
+        }
 
         @media (min-width: 768px) { 
             .grid-2 { grid-template-columns: 1fr 1fr; } 
@@ -184,6 +199,7 @@
             .mempelai-foto { width: 280px; height: 380px; }
         }
         @keyframes elegantFade { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { from { transform: scale(0.85) rotate(-2deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
         #sparkle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; }
 
         .ripple { position: absolute; border-radius: 50%; background: rgba(197, 165, 114, 0.5); transform: scale(0); animation: rippleEffect 0.7s var(--ease-luxe); pointer-events: none; }
@@ -205,12 +221,15 @@
 
     <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
         <span class="lightbox-close" onclick="closeLightbox(event, true)">&times;</span>
+        <span class="lightbox-arrow prev" onclick="navLightbox(event, -1)"><i class="fas fa-chevron-left"></i></span>
         <img id="lightbox-img" src="" alt="Zoomed Photo">
+        <span class="lightbox-arrow next" onclick="navLightbox(event, 1)"><i class="fas fa-chevron-right"></i></span>
     </div>
 
     <div id="edit-toggle" onclick="toggleEditPanel()"><i class="fas fa-cog"></i></div>
+    <a href="#" id="share-btn" onclick="shareInvitation(event)"><i class="fas fa-share-alt"></i></a>
+    <a href="#" id="music-btn" onclick="toggleMusic(event)"><i class="fas fa-music"></i></a>
 
-    <!-- TAMBAHKAN data-lenis-prevent DI SINI UNTUK MENGIZINKAN SCROLL DI PANEL -->
     <div id="edit-panel" data-lenis-prevent>
         <div class="edit-header">
             <h3>Pengaturan Database</h3>
@@ -248,8 +267,6 @@
             <button class="btn-buka" onclick="bukaUndangan(event)">Buka Undangan</button>
         </div>
     </div>
-
-    <a href="#" id="music-btn" onclick="toggleMusic(event)"><i class="fas fa-music"></i></a>
 
     <div class="navbar" id="navbar">
         <a href="#home"><i class="fas fa-home"></i></a>
@@ -371,7 +388,6 @@
                             <button type="submit" class="btn-submit">Kirim Ucapan</button>
                         </form>
                     </div>
-                    <!-- TAMBAHKAN data-lenis-prevent DI SINI UNTUK MENGIZINKAN SCROLL DI KOMENTAR -->
                     <div id="komentar-list" data-lenis-prevent style="max-height: 450px; overflow-y: auto; padding-right: 10px;"></div>
                 </div>
                 <div class="social-media-section">
@@ -429,9 +445,11 @@
         const urlParams = new URLSearchParams(window.location.search);
         const isShareMode = urlParams.get('share') === 'true';
         const namaTamu = urlParams.get('to');
+        
+        // JIKA SHARE MODE, TOMBOL EDIT PANEL & SHARE DISABLED
         if (isShareMode) { 
             document.getElementById('edit-toggle').style.display = 'none'; 
-            document.getElementById('music-btn').style.display = 'none'; 
+            document.getElementById('share-btn').style.display = 'none'; 
         }
         if (namaTamu) document.getElementById('nama-tamu').innerText = decodeURIComponent(namaTamu);
 
@@ -445,12 +463,110 @@
             
             document.getElementById('navbar').classList.add('show');
             document.getElementById('frame-border').classList.add('active');
-            if (!isShareMode) { document.getElementById('music-btn').classList.add('show-btn'); playMusic(); }
+            
+            document.getElementById('music-btn').classList.add('show-btn');
+            playMusic();
             
             startRevealAnimation(); startCountdown(); startSparkleEffect(); loadRSVP();
             observeGallery();
         }
 
+        // ===== FUNGSI BAGIKAN UNDANGAN (DENGAN GAMBAR) =====
+        async function shareInvitation(e) {
+            if (e) e.preventDefault();
+            const baseUrl = window.location.origin + window.location.pathname;
+            const shareUrl = baseUrl + '?share=true';
+            const currentNama = document.getElementById('nama-tamu').innerText;
+            const shareUrlFull = currentNama && currentNama !== 'Bapak/Ibu/Saudara/i' ? `${shareUrl}&to=${encodeURIComponent(currentNama)}` : shareUrl;
+            
+            const imgSrc = document.getElementById('foto-pria').src || document.getElementById('foto-wanita').src;
+            
+            const shareData = {
+                title: 'The Wedding of Fahri & Suci',
+                text: `Bismillah, kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri pernikahan kami.\n\n${shareUrlFull}`,
+                url: shareUrlFull
+            };
+
+            if (navigator.share) {
+                try {
+                    if (imgSrc && navigator.canShare) {
+                        try {
+                            const response = await fetch(imgSrc);
+                            const blob = await response.blob();
+                            const file = new File([blob], 'mempelai.jpg', { type: blob.type });
+                            if (navigator.canShare({ files: [file] })) {
+                                await navigator.share({
+                                    title: shareData.title,
+                                    text: shareData.text,
+                                    files: [file]
+                                });
+                                return;
+                            }
+                        } catch (imgErr) {
+                            console.warn("Image share failed, falling back to url share:", imgErr);
+                        }
+                    }
+                    await navigator.share(shareData);
+                } catch (err) {
+                    console.error('Share failed', err);
+                }
+            } else {
+                const waUrl = `https://wa.me/?text=${encodeURIComponent(shareData.text)}`;
+                window.open(waUrl, '_blank');
+            }
+        }
+
+        // ===== LIGHTBOX DENGAN NAVIGASI =====
+        let mainGalleryImages = [];
+        let currentLightboxArray = [];
+        let currentImgIndex = 0;
+
+        function openLightbox(src) {
+            if (mainGalleryImages.includes(src)) {
+                currentLightboxArray = mainGalleryImages;
+            } else {
+                currentLightboxArray = [src]; 
+            }
+            currentImgIndex = currentLightboxArray.indexOf(src);
+            if (currentImgIndex === -1) {
+                currentLightboxArray.unshift(src);
+                currentImgIndex = 0;
+            }
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('active');
+            if(lenis.stop) lenis.stop();
+            toggleArrows();
+        }
+
+        function toggleArrows() {
+            const prevBtn = document.querySelector('.lightbox-arrow.prev');
+            const nextBtn = document.querySelector('.lightbox-arrow.next');
+            if (currentLightboxArray.length <= 1) {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+            }
+        }
+
+        function navLightbox(e, direction) {
+            e.stopPropagation();
+            if (currentLightboxArray.length <= 1) return;
+            currentImgIndex += direction;
+            if (currentImgIndex >= currentLightboxArray.length) currentImgIndex = 0;
+            if (currentImgIndex < 0) currentImgIndex = currentLightboxArray.length - 1;
+            document.getElementById('lightbox-img').src = currentLightboxArray[currentImgIndex];
+        }
+
+        function closeLightbox(e, force=false) { 
+            if (force || e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) { 
+                document.getElementById('lightbox').classList.remove('active'); 
+                if(lenis.start) lenis.start(); 
+            } 
+        }
+
+        // ===== FUNGSI UMUM =====
         function createRipple(e) {
             if(!e || !e.currentTarget) return;
             const btn = e.currentTarget;
@@ -518,9 +634,6 @@
             }
         }
         
-        function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('active'); if(lenis.stop) lenis.stop(); }
-        function closeLightbox(e, force=false) { if (force || e.target.id === 'lightbox') { document.getElementById('lightbox').classList.remove('active'); if(lenis.start) lenis.start(); } }
-        
         function startRevealAnimation() { 
             const obs = new IntersectionObserver((e) => { e.forEach(en => { if (en.isIntersecting) en.target.classList.add('active'); }); }, { threshold: 0.1 }); 
             document.querySelectorAll('.reveal').forEach(r => obs.observe(r)); 
@@ -577,6 +690,7 @@
             anim();
         }
 
+        // ===== FUNGSI DATABASE =====
         async function uploadCoverPhoto(event) {
             if(!sb) return alert("Database tidak terhubung.");
             const file = event.target.files[0]; if (!file) return;
@@ -672,11 +786,13 @@
                     }
                     const grid = document.getElementById('grid-gallery');
                     grid.innerHTML = '';
+                    mainGalleryImages = []; 
                     if (data.gallery_urls && data.gallery_urls.length > 0) {
+                        mainGalleryImages = data.gallery_urls;
                         data.gallery_urls.forEach(url => {
                             const img = document.createElement('img');
                             img.src = url;
-                            img.setAttribute('onclick', 'openLightbox(this.src)');
+                            img.addEventListener('click', function() { openLightbox(url); });
                             grid.appendChild(img);
                         });
                         setTimeout(observeGallery, 200);
